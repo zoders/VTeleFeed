@@ -8,6 +8,6 @@
 - [Филипповский Александр](https://github.com/zoders)
 - [Дэйдыш Илья](https://github.com/deydysh)
 - [Исаев Джамбулат](https://github.com/Djambulat69)
-- [Виноградов Клим](https://github.com/)
+- [Виноградов Клим](https://github.com/vinklim)
 ```
 
