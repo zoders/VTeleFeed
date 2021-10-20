@@ -45,4 +45,8 @@ dependencies {
     // Rx
     implementation "io.reactivex.rxjava3:rxjava:3.1.2"
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    // AAC
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 }
