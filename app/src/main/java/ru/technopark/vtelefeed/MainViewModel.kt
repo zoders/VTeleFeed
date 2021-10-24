@@ -35,7 +35,6 @@ class MainViewModel : ViewModel() {
             clientObservable
                 .subscribe(
                     { update ->
-                        val a = 5
                         if (update is TdApi.UpdateAuthorizationState) {
                             Log.i(TAG, update.authorizationState.javaClass.name)
                         }
@@ -50,52 +49,72 @@ class MainViewModel : ViewModel() {
     }
 
     private fun setTdLibParameters() {
-        client.send(
-            TdApi.SetTdlibParameters(
-                TdApi.TdlibParameters(
-                    false,
-                    "/sdcard/Android/data/ru.technopark.vtelefeed/files",
-                    "/sdcard/Android/data/ru.technopark.vtelefeed/files",
-                    false,
-                    false,
-                    false,
-                    false,
-                    7323533,
-                    "00e5449a30bce5a038c18909391646e2",
-                    "en-GB",
-                    "Samsung",
-                    "Android 11",
-                    "1",
-                    false,
-                    true
+        disposable.add(
+            client.sendSingle(
+                TdApi.SetTdlibParameters(
+                    TdApi.TdlibParameters(
+                        false,
+                        "/sdcard/Android/data/ru.technopark.vtelefeed/files",
+                        "/sdcard/Android/data/ru.technopark.vtelefeed/files",
+                        false,
+                        false,
+                        false,
+                        false,
+                        7323533,
+                        "00e5449a30bce5a038c18909391646e2",
+                        "en-GB",
+                        "Samsung",
+                        "Android 11",
+                        "1",
+                        false,
+                        true
+                    )
                 )
-            ), { result ->
-                val a = 5
-            }
+            )
+                .subscribe(
+                    { result -> },
+                    ::log
+                )
         )
     }
 
     private fun setEncryptionKey() {
-        client.send(
-            TdApi.SetDatabaseEncryptionKey(), null, null
+        disposable.add(
+            client.sendSingle(TdApi.SetDatabaseEncryptionKey())
+                .subscribe(
+                    { result -> },
+                    ::log
+                )
         )
     }
 
     private fun setPhoneNumber() {
-        client.send(
-            TdApi.SetAuthenticationPhoneNumber(
-                "79778483132",
-                TdApi.PhoneNumberAuthenticationSettings(false, true, false)
-            ),
-            null,
-            null
+        disposable.add(
+            client.sendSingle(
+                TdApi.SetAuthenticationPhoneNumber(
+                    "79778483132",
+                    TdApi.PhoneNumberAuthenticationSettings(false, true, false)
+                )
+            )
+                .subscribe(
+                    { result -> },
+                    ::log
+                )
         )
     }
 
     private fun setWaitCode() {
-        client.send(
-            TdApi.CheckAuthenticationCode("84805"), null, null
+        disposable.add(
+            client.sendSingle(TdApi.CheckAuthenticationCode("84805"))
+                .subscribe(
+                    { result -> },
+                    ::log
+                )
         )
+    }
+
+    private fun log(e: Throwable) {
+        Log.e(TAG, e.stackTraceToString(), e)
     }
 
     companion object {
