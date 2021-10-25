@@ -8,7 +8,7 @@ fun Client.sendSingle(query: TdApi.Function): Single<TdApi.Object> =
     Single.create { emitter ->
         send(
             query,
-            { result -> emitter.onSuccess(result) },
-            { e -> emitter.onError(e) }
+            emitter::onSuccess,
+            emitter::onError
         )
     }
