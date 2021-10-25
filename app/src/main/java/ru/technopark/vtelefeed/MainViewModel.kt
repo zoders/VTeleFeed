@@ -140,7 +140,35 @@ class MainViewModel : ViewModel() {
                             getChats(order, offset)
                         }
 
-                        Log.i(TAG, chats.map { it.title }.toString())
+                        chats.forEach { chat ->
+                            if (chat.title == "Айдем") {
+                                getMessages(chat.id)
+                            }
+                        }
+
+//                        Log.i(TAG, chats.map { it.title }.toString())
+                    },
+                    ::log
+                )
+        )
+    }
+
+
+    private fun getMessages(chatId: Long, fromMessageId: Long = 0, offset: Int = 0) {
+        var haveMoreMessages: Boolean = false
+
+        disposable.add(
+            client.sendSingle(
+                TdApi.GetChatHistory(chatId, fromMessageId, offset, 10, false)
+            )
+                .subscribe(
+                    { result ->
+                        val messages = (result as TdApi.Messages).messages.toList()
+                        haveMoreMessages = messages.isNotEmpty()
+                        if (haveMoreMessages) {
+                            getMessages(chatId, messages.last().id)
+                        }
+                        Log.i(TAG, messages.map { it.content } .toString())
                     },
                     ::log
                 )
