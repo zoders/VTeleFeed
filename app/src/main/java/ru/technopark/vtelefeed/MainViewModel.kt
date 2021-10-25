@@ -10,7 +10,6 @@ import org.drinkless.td.libcore.telegram.TdApi
 
 class MainViewModel : ViewModel() {
 
-
     private val disposable: CompositeDisposable = CompositeDisposable()
 
     private lateinit var client: Client
@@ -26,17 +25,23 @@ class MainViewModel : ViewModel() {
         )
     }
 
+    init {
+        setupClient()
+    }
+
     override fun onCleared() {
         disposable.dispose()
     }
 
-    fun setupClient() {
+    private fun setupClient() {
         disposable.add(
             clientObservable
                 .subscribe(
                     { update ->
-                        if (update is TdApi.UpdateAuthorizationState) {
-                            Log.i(TAG, update.authorizationState.javaClass.name)
+                        if (update is TdApi.UpdateAuthorizationState &&
+                            update.authorizationState is TdApi.AuthorizationStateReady
+                        ) {
+                            getChats()
                         }
                     },
                     { e -> Log.e(TAG, e.stackTraceToString(), e) }
@@ -108,6 +113,35 @@ class MainViewModel : ViewModel() {
             client.sendSingle(TdApi.CheckAuthenticationCode("84805"))
                 .subscribe(
                     { result -> },
+                    ::log
+                )
+        )
+    }
+
+    private fun getChats(offsetOrder: Long = Long.MAX_VALUE, offsetChatId: Long = 0) {
+        var haveMoreChats: Boolean = false
+
+        disposable.add(
+            client.sendSingle(TdApi.GetChats(TdApi.ChatListMain(), offsetOrder, offsetChatId, 3))
+                .flatMapObservable { chats ->
+                    Observable.fromArray<Long>(*(chats as TdApi.Chats).chatIds.toTypedArray())
+                }
+                .flatMap { id ->
+                    client.sendSingle(TdApi.GetChat(id)).toObservable()
+                }
+                .toList()
+                .subscribe(
+                    { result ->
+                        val chats = result as List<TdApi.Chat>
+                        haveMoreChats = chats.isNotEmpty()
+                        if (haveMoreChats) {
+                            val offset = chats.last().id
+                            val order = chats.last().positions.last().order
+                            getChats(order, offset)
+                        }
+
+                        Log.i(TAG, chats.map { it.title }.toString())
+                    },
                     ::log
                 )
         )
