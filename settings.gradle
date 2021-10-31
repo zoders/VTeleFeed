@@ -8,4 +8,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "VTeleFeed"
 include ':app'
-include ':libtd'
