@@ -1,7 +1,8 @@
-package ru.technopark.vtelefeed
+package ru.technopark.vtelefeed.Models
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import ru.technopark.vtelefeed.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
