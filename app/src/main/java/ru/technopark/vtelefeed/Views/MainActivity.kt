@@ -1,4 +1,4 @@
-package ru.technopark.vtelefeed.Models
+package ru.technopark.vtelefeed.Views
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
