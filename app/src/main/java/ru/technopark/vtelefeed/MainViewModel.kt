@@ -54,6 +54,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun setTdLibParameters() {
+
         disposable.add(
             client.sendSingle(
                 TdApi.SetTdlibParameters(
@@ -61,9 +62,9 @@ class MainViewModel : ViewModel() {
                         false,
                         "/sdcard/Android/data/ru.technopark.vtelefeed/files",
                         "/sdcard/Android/data/ru.technopark.vtelefeed/files",
-                        false,
-                        false,
-                        false,
+                        true,
+                        true,
+                        true,
                         false,
                         7323533,
                         "00e5449a30bce5a038c18909391646e2",
@@ -71,7 +72,7 @@ class MainViewModel : ViewModel() {
                         "Samsung",
                         "Android 11",
                         "1",
-                        false,
+                        true,
                         true
                     )
                 )
@@ -98,7 +99,11 @@ class MainViewModel : ViewModel() {
             client.sendSingle(
                 TdApi.SetAuthenticationPhoneNumber(
                     "79778483132",
-                    TdApi.PhoneNumberAuthenticationSettings(false, true, false)
+                    TdApi.PhoneNumberAuthenticationSettings(
+                        false,
+                        true,
+                        false
+                    )
                 )
             )
                 .subscribe(
@@ -119,7 +124,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun getChats(offsetOrder: Long = Long.MAX_VALUE, offsetChatId: Long = 0) {
-        var haveMoreChats: Boolean = false
+        var haveMoreChats: Boolean
 
         disposable.add(
             client.sendSingle(TdApi.GetChats(TdApi.ChatListMain(), offsetOrder, offsetChatId, 3))
@@ -138,13 +143,14 @@ class MainViewModel : ViewModel() {
                             val offset = chats.last().id
                             val order = chats.last().positions.last().order
                             getChats(order, offset)
+                        } else {
+                            searchMessages(" ", limit = 2)
                         }
 
-                        chats.forEach { chat ->
-                            if (chat.title == "Айдем") {
-                                getMessages(chat.id)
-                            }
+                        chats.find { chat -> chat.title == "Айдем" }?.let {
+//                            getMessages(it.id)
                         }
+
 
 //                        Log.i(TAG, chats.map { it.title }.toString())
                     },
@@ -153,22 +159,88 @@ class MainViewModel : ViewModel() {
         )
     }
 
-
-    private fun getMessages(chatId: Long, fromMessageId: Long = 0, offset: Int = 0) {
+    private fun getMessages(
+        chatId: Long,
+        fromMessageId: Long = 0,
+        offset: Int = 0,
+        limit: Int = 10
+    ) {
         var haveMoreMessages: Boolean = false
 
         disposable.add(
             client.sendSingle(
-                TdApi.GetChatHistory(chatId, fromMessageId, offset, 10, false)
+                TdApi.GetChatHistory(chatId, fromMessageId, offset, limit, false)
             )
                 .subscribe(
                     { result ->
                         val messages = (result as TdApi.Messages).messages.toList()
                         haveMoreMessages = messages.isNotEmpty()
                         if (haveMoreMessages) {
-                            getMessages(chatId, messages.last().id)
+                            getMessages(chatId, messages.last().id, offset, limit)
                         }
-                        Log.i(TAG, messages.map { it.content } .toString())
+                        Log.i(TAG, messages.map { it.content }.toString())
+                    },
+                    ::log
+                )
+        )
+    }
+
+    private fun searchMessages(
+        query: String,
+        offsetDate: Int = 0,
+        offsetChatId: Long = 0L,
+        offsetMessageId: Long = 0L,
+        limit: Int = 1,
+        filter: TdApi.SearchMessagesFilter = TdApi.SearchMessagesFilterEmpty(),
+        minDate: Int = 0,
+        maxDate: Int = 0
+    ) {
+        var haveMoreMessages: Boolean = false
+
+        disposable.add(
+            client.sendSingle(
+                TdApi.SearchMessages(
+                    TdApi.ChatListMain(),
+                    query,
+                    offsetDate,
+                    offsetChatId,
+                    offsetMessageId,
+                    limit,
+                    filter,
+                    minDate,
+                    maxDate
+                )
+            )
+                .subscribe(
+                    { result ->
+                        val messages = (result as TdApi.Messages).messages.toList()
+                        haveMoreMessages = messages.isNotEmpty()
+
+                        Log.i(
+                            TAG,
+                            messages
+                                .map { it.content }
+                                .filterIsInstance<TdApi.MessageText>()
+                                .map { it.text }
+                                .filterIsInstance<TdApi.FormattedText>()
+                                .map { it.text }
+                                .toString()
+                        )
+
+                        if (haveMoreMessages) {
+                            val lastMessage = messages.last()
+                            val a = 5
+                            searchMessages(
+                                query,
+                                lastMessage.date,
+                                lastMessage.chatId,
+                                lastMessage.id,
+                                limit,
+                                filter,
+                                minDate,
+                                maxDate
+                            )
+                        }
                     },
                     ::log
                 )
