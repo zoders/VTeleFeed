@@ -144,48 +144,15 @@ class MainViewModel : ViewModel() {
                             val order = chats.last().positions.last().order
                             getChats(order, offset)
                         } else {
-                            searchMessages(" ", limit = 2)
+                            searchSupergroupMessages(" ", limit = 20)
                         }
-
-                        chats.find { chat -> chat.title == "Айдем" }?.let {
-//                            getMessages(it.id)
-                        }
-
-
-//                        Log.i(TAG, chats.map { it.title }.toString())
                     },
                     ::log
                 )
         )
     }
 
-    private fun getMessages(
-        chatId: Long,
-        fromMessageId: Long = 0,
-        offset: Int = 0,
-        limit: Int = 10
-    ) {
-        var haveMoreMessages: Boolean = false
-
-        disposable.add(
-            client.sendSingle(
-                TdApi.GetChatHistory(chatId, fromMessageId, offset, limit, false)
-            )
-                .subscribe(
-                    { result ->
-                        val messages = (result as TdApi.Messages).messages.toList()
-                        haveMoreMessages = messages.isNotEmpty()
-                        if (haveMoreMessages) {
-                            getMessages(chatId, messages.last().id, offset, limit)
-                        }
-                        Log.i(TAG, messages.map { it.content }.toString())
-                    },
-                    ::log
-                )
-        )
-    }
-
-    private fun searchMessages(
+    private fun searchSupergroupMessages(
         query: String,
         offsetDate: Int = 0,
         offsetChatId: Long = 0L,
@@ -211,36 +178,55 @@ class MainViewModel : ViewModel() {
                     maxDate
                 )
             )
-                .subscribe(
-                    { result ->
-                        val messages = (result as TdApi.Messages).messages.toList()
-                        haveMoreMessages = messages.isNotEmpty()
+                .doAfterSuccess { response ->
+                    val messages = (response as TdApi.Messages).messages.toList()
 
+                    haveMoreMessages = messages.isNotEmpty()
+
+                    if (haveMoreMessages) {
+                        val lastMessage = messages.last()
+                        searchSupergroupMessages(
+                            query,
+                            lastMessage.date,
+                            lastMessage.chatId,
+                            lastMessage.id,
+                            limit,
+                            filter,
+                            minDate,
+                            maxDate
+                        )
+                    }
+
+                }
+                .flatMapObservable { response ->
+                    Observable.fromArray(*(response as TdApi.Messages).messages)
+                }
+                .flatMap<Pair<TdApi.Message, TdApi.Chat>> { message ->
+
+                    val chatObservable =
+                        client.sendSingle(TdApi.GetChat(message.chatId)).toObservable()
+
+                    return@flatMap Observable.fromArray(message)
+                        .zipWith(chatObservable)
+                        { zipMessage, zipChat -> zipMessage to zipChat as TdApi.Chat }
+                }
+                .filter { pair ->
+                    val chatType = pair.second.type
+                    chatType is TdApi.ChatTypeSupergroup && chatType.isChannel
+                }
+                .map { it.first }
+                .toList()
+                .filter { it.isNotEmpty() }
+                .subscribe(
+                    { messages: List<TdApi.Message> ->
                         Log.i(
                             TAG,
                             messages
                                 .map { it.content }
                                 .filterIsInstance<TdApi.MessageText>()
-                                .map { it.text }
-                                .filterIsInstance<TdApi.FormattedText>()
-                                .map { it.text }
+                                .map { it.text.text }
                                 .toString()
                         )
-
-                        if (haveMoreMessages) {
-                            val lastMessage = messages.last()
-                            val a = 5
-                            searchMessages(
-                                query,
-                                lastMessage.date,
-                                lastMessage.chatId,
-                                lastMessage.id,
-                                limit,
-                                filter,
-                                minDate,
-                                maxDate
-                            )
-                        }
                     },
                     ::log
                 )
