@@ -8,7 +8,7 @@ private const val TAG = "PostDataSource"
 class PostDataSource(val postStorage: PostStorage) : PositionalDataSource<Post>() {
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Post>) {
         Log.d(
-		    TAG,
+            TAG,
 		    "loadInitial, requestedStartPosition = ${params.requestedStartPosition}," +
                 " requestedLoadSize = ${params.requestedLoadSize}"
 		)
