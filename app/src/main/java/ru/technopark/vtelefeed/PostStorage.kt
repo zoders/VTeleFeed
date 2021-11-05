@@ -16,5 +16,6 @@ class PostStorage : ViewModel() {
     }
 
     fun getData(startPosition: Int, loadSize: Int): List<Post> =
-        if (startPosition == 20) emptyList() else posts.subList(startPosition, startPosition + loadSize)
+        if (startPosition == 20) emptyList()
+		else posts.subList(startPosition, startPosition + loadSize)
 }

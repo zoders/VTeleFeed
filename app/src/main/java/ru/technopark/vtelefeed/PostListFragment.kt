@@ -31,7 +31,8 @@ class PostListFragment : Fragment() {
         adapter = PostAdapter(postStorage.posts, PostDiffer())
         val factory = PostSourceFactory(postStorage)
         val config = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(2).build()
-        val pagedListLiveData = LivePagedListBuilder(factory, config).setFetchExecutor(Executors.newSingleThreadExecutor()).build()
+        val pagedListLiveData = LivePagedListBuilder(factory, config)
+		    .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
         pagedListLiveData.observe(viewLifecycleOwner, object : Observer<PagedList<Post>> {
             override fun onChanged(t: PagedList<Post>?) {
                 adapter?.submitList(t) ?: throw NullPointerException()
