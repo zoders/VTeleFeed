@@ -20,13 +20,13 @@ class TelegramDataSource(private val client: Client) {
     ): ChannelsMessages {
         val query = " "
 
-        var messages = listOf<TdApi.Message>()
-        val posts = mutableListOf<TdApi.Message>()
+        var allMessages = listOf<TdApi.Message>()
+        val channelMessages = mutableListOf<TdApi.Message>()
 
-        while (posts.size < limit) {
-            val lastMessage = messages.lastOrNull()
+        while (channelMessages.size < limit) {
+            val lastMessage = allMessages.lastOrNull()
 
-            messages = searchMessages(
+            allMessages = searchMessages(
                 query,
                 lastMessage?.date ?: offsetMessage?.date ?: 0,
                 lastMessage?.chatId ?: offsetMessage?.chatId ?: 0L,
@@ -37,8 +37,12 @@ class TelegramDataSource(private val client: Client) {
                 maxDate
             ).messages.toList()
 
-            val channelMessages = messages
-                .map { msg -> withContext(coroutineContext) { async { msg to getChat(msg.chatId) } } }
+            val newChannelMessages = allMessages
+                .map { msg ->
+                    withContext(coroutineContext) {
+                        async { msg to getChat(msg.chatId) }
+                    }
+                }
                 .awaitAll()
                 .filter { pair: Pair<TdApi.Message, TdApi.Chat> ->
                     val chatType = pair.second.type
@@ -46,10 +50,10 @@ class TelegramDataSource(private val client: Client) {
                 }
                 .map { it.first }
 
-            posts.addAll(channelMessages)
+            channelMessages.addAll(newChannelMessages)
         }
 
-        return ChannelsMessages(posts, messages.last())
+        return ChannelsMessages(channelMessages, allMessages.last())
     }
 
     private suspend fun searchMessages(
