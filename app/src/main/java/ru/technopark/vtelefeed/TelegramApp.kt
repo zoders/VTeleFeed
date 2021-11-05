@@ -1,9 +1,8 @@
 package ru.technopark.vtelefeed
 
+import java.io.File
 import org.drinkless.td.libcore.telegram.Client
 import org.drinkless.td.libcore.telegram.TdApi
-import java.io.File
-
 
 class TelegramApp constructor(activity: Callback?) {
     private var client: Client? = null
@@ -12,6 +11,7 @@ class TelegramApp constructor(activity: Callback?) {
     var phoneNumber: String = ""
     var verificationCode: String = ""
     private var activity: Callback? = null
+
     private fun getClient(): Client? {
 
         if (client == null) {
@@ -21,11 +21,13 @@ class TelegramApp constructor(activity: Callback?) {
         }
         return client
     }
-    init{
+
+    init {
         this.activity = activity
         client = getClient()
         Client.create(activity, null, null)
     }
+
     fun changeAuthorizationState() {
         client?.send(TdApi.GetAuthorizationState()) { obj ->
             if (obj is TdApi.AuthorizationState) {
@@ -33,7 +35,7 @@ class TelegramApp constructor(activity: Callback?) {
             }
         }
     }
-    fun logOut(){
+    fun logOut() {
 
         phoneNumber = ""
         verificationCode = ""
@@ -67,30 +69,34 @@ class TelegramApp constructor(activity: Callback?) {
                 null
             )
             TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR -> {
-                if (phoneNumber != ""){
+                if (phoneNumber != "") {
                     client!!.send(
-                        TdApi.SetAuthenticationPhoneNumber(phoneNumber, null), null, null
+                        TdApi.SetAuthenticationPhoneNumber(phoneNumber, null),
+                        null,
+                        null
                     )
                     TdApi.UpdateAuthorizationState()
                 }
             }
             TdApi.AuthorizationStateWaitCode.CONSTRUCTOR -> {
                 if (verificationCode != "") {
-                    client!!.send(TdApi.CheckAuthenticationCode(verificationCode), null, null)
+                    client!!.send(
+                        TdApi.CheckAuthenticationCode(verificationCode),
+                        null,
+                        null
+                    )
                 }
                 TdApi.UpdateAuthorizationState()
             }
-
             TdApi.AuthorizationStateLoggingOut.CONSTRUCTOR -> {
-                //Logging out
+                // Logging out
             }
             TdApi.AuthorizationStateClosing.CONSTRUCTOR -> {
-                //Closing
+                // Closing
             }
             TdApi.AuthorizationStateClosed.CONSTRUCTOR -> {
-                //Closed
+                // Closed
                 client = Client.create(activity, null, null)
-
             }
             else -> {}
         }
@@ -108,6 +114,7 @@ class TelegramApp constructor(activity: Callback?) {
         CLOSING,
         CLOSED
     }
+
     fun getTelegramAuthorizationState(): TelegramAuthorizationState {
         val authorizationState = this.authorizationState
             ?: return TelegramAuthorizationState.UNKNOWN
