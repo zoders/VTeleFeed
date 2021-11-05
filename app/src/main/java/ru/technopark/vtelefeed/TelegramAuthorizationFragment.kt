@@ -34,20 +34,20 @@ class TelegramAuthorizationFragment : Fragment(), TelegramApp.Callback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val logTextView  = view.findViewById<TextView>(R.id.logTextView)
+        val logTextView = view.findViewById<TextView>(R.id.logTextView)
         Toast.makeText(
             activity,
             telegramApp!!.getTelegramAuthorizationState().toString(),
             Toast.LENGTH_SHORT
         ).show()
         logTextView.text = telegramApp!!.getTelegramAuthorizationState().toString()
-        view.findViewById<Button>(R.id.getCode).setOnClickListener{
-            val phoneNumberView  = view.findViewById<EditText>(R.id.phoneNumber)
-            telegramApp?.phoneNumber  = phoneNumberView.text.toString()
+        view.findViewById<Button>(R.id.getCode).setOnClickListener {
+            val phoneNumberView = view.findViewById<EditText>(R.id.phoneNumber)
+            telegramApp?.phoneNumber = phoneNumberView.text.toString()
             telegramApp?.changeAuthorizationState()
         }
-        view.findViewById<Button>(R.id.applyCode).setOnClickListener{
-            val codeView  = view.findViewById<EditText>(R.id.code)
+        view.findViewById<Button>(R.id.applyCode).setOnClickListener {
+            val codeView = view.findViewById<EditText>(R.id.code)
             telegramApp?.verificationCode = codeView.text.toString()
             telegramApp?.changeAuthorizationState()
         }
