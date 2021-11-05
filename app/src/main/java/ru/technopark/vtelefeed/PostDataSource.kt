@@ -20,7 +20,7 @@ class PostDataSource(val postStorage: PostStorage) : PositionalDataSource<Post>(
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Post>) {
         Log.d(
             TAG,
-			"loadRange, startPosition = ${params.startPosition}," +
+            "loadRange, startPosition = ${params.startPosition}," +
                 " loadSize = ${params.loadSize}"
         )
         val result: List<Post> = postStorage.getData(params.startPosition, params.loadSize)
