@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".TelegramAuthorizationFragment">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        <EditText
+                android:id="@+id/phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:autofillHints=""
+                android:layout_weight="1"
+                android:layout_margin="5dp"/>
+        <EditText
+                android:id="@+id/code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:autofillHints=""
+                android:layout_weight="1"
+                android:layout_margin="5dp"/>
+        <Button
+                android:id="@+id/getCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/get_code"
+                tools:layout_constraintTop_toBottomOf="@+id/editText"
+                tools:layout_constraintLeft_toLeftOf="parent" />
+        <Button
+                android:id="@+id/applyCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_code"
+                tools:layout_constraintTop_toBottomOf="@+id/editText"
+                tools:layout_constraintLeft_toLeftOf="parent" />
+        <Button
+                android:id="@+id/logOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_out"
+                tools:layout_constraintTop_toBottomOf="@+id/editText"
+                tools:layout_constraintLeft_toLeftOf="parent" />
+        <TextView
+                android:id="@+id/logTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                tools:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_constraintLeft_toLeftOf="parent"
+                tools:layout_constraintRight_toRightOf="parent"
+                tools:layout_constraintTop_toTopOf="parent"
+                android:layout_weight="1"
+                android:layout_margin="5dp"/>
+    </LinearLayout>
+
+</FrameLayout>

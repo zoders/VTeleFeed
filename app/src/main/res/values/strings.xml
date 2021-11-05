@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">VTeleFeed</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="log_out">Log out</string>
+    <string name="send_code">Отправить код</string>
+    <string name="get_code">Получить код</string>
 </resources>
