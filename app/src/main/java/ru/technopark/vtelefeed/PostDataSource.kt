@@ -9,7 +9,7 @@ class PostDataSource(val postStorage: PostStorage) : PositionalDataSource<Post>(
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Post>) {
         Log.d(
             TAG,
-		    "loadInitial, requestedStartPosition = ${params.requestedStartPosition}," +
+            "loadInitial, requestedStartPosition = ${params.requestedStartPosition}," +
                 " requestedLoadSize = ${params.requestedLoadSize}"
 		)
         val result: List<Post> =
@@ -19,7 +19,7 @@ class PostDataSource(val postStorage: PostStorage) : PositionalDataSource<Post>(
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Post>) {
         Log.d(
-		    TAG,
+            TAG,
 			"loadRange, startPosition = ${params.startPosition}," +
                 " loadSize = ${params.loadSize}"
 	    )
