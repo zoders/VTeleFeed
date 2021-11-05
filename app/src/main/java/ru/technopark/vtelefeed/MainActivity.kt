@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
             val fragment = PostListFragment.newInstance()
             supportFragmentManager.beginTransaction().add(
                 R.id.fragment_container,
-				fragment
+                fragment
 			).commit()
         }
     }
