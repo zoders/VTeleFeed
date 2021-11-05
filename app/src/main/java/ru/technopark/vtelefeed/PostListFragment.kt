@@ -33,11 +33,14 @@ class PostListFragment : Fragment() {
         val config = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(2).build()
         val pagedListLiveData = LivePagedListBuilder(factory, config)
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
-        pagedListLiveData.observe(viewLifecycleOwner, object : Observer<PagedList<Post>> {
-            override fun onChanged(t: PagedList<Post>?) {
-                adapter?.submitList(t) ?: throw NullPointerException()
+        pagedListLiveData.observe(
+            viewLifecycleOwner,
+            object : Observer<PagedList<Post>> {
+                override fun onChanged(t: PagedList<Post>?) {
+                    adapter?.submitList(t) ?: throw NullPointerException()
+                }
             }
-        })
+        )
         recyclerView.adapter = adapter
         return view
     }
