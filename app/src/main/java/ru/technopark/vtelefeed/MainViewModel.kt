@@ -14,6 +14,8 @@ class MainViewModel : ViewModel() {
 
     private lateinit var client: Client
 
+    private val tgSource by lazy { TelegramDataSource(client) }
+
     private val clientObservable: Observable<TdApi.Object> = Observable.create { emitter ->
         client = Client.create(
             { update ->
