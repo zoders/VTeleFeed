@@ -10,7 +10,7 @@ class PostStorage : ViewModel() {
             val post = Post()
             post.id = i
             post.fromVkOrTg = if (i % 2 == 0) R.drawable.vk else R.drawable.tg
-            for (j in 0..19) post.text += "текст поста "
+            for (j in 0..20) post.text += "текст поста "
             posts += post
         }
     }
