@@ -10,7 +10,7 @@ class PostDataSource(val postStorage: PostStorage) : PositionalDataSource<Post>(
         Log.d(TAG, "loadInitial, requestedStartPosition = ${params.requestedStartPosition}," +
                 " requestedLoadSize = ${params.requestedLoadSize}")
         val result: List<Post> =
-			postStorage.getData(params.requestedStartPosition, params.requestedLoadSize)
+            postStorage.getData(params.requestedStartPosition, params.requestedLoadSize)
         callback.onResult(result, 0)
     }
 
