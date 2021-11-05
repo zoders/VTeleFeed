@@ -11,7 +11,6 @@ class TelegramApp constructor(activity: Callback?) {
     var phoneNumber: String = ""
     var verificationCode: String = ""
     private var activity: Callback? = null
-
     private fun getClient(): Client? {
 
         if (client == null) {
@@ -49,6 +48,7 @@ class TelegramApp constructor(activity: Callback?) {
         if (authorizationState != null) {
             this.authorizationState = authorizationState
         }
+
         when (this.authorizationState?.constructor) {
             TdApi.AuthorizationStateWaitTdlibParameters.CONSTRUCTOR -> {
                 val parameters = TdApi.TdlibParameters()
@@ -56,8 +56,8 @@ class TelegramApp constructor(activity: Callback?) {
                 parameters.databaseDirectory = File(appDir, "tdlib").absolutePath
                 parameters.useMessageDatabase = true
                 parameters.useSecretChats = true
-                parameters.apiId = 8803623
-                parameters.apiHash = "57cd1dc272b50a33d4060686f1f71d32"
+                parameters.apiId = apiId
+                parameters.apiHash = apiHash
                 parameters.systemLanguageCode = "en"
                 parameters.deviceModel = "Android"
                 parameters.applicationVersion = "1.0"
@@ -142,5 +142,10 @@ class TelegramApp constructor(activity: Callback?) {
 
     interface Callback : Client.ResultHandler {
         override fun onResult(`object`: TdApi.Object)
+    }
+
+    companion object {
+        private const val apiId = 8803623
+        private const val apiHash = "57cd1dc272b50a33d4060686f1f71d32"
     }
 }
