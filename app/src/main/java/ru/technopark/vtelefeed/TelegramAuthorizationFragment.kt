@@ -17,7 +17,8 @@ class TelegramAuthorizationFragment : Fragment(), TelegramApp.Callback {
         super.onCreate(savedInstanceState)
         val filesDir = activity?.filesDir?.absoluteFile
         telegramApp = TelegramApp(this)
-        telegramApp!!.appDir = filesDir.toString()
+        telegramApp?.setAppDir(filesDir.toString())
+        telegramApp?.createClient()
     }
 
     override fun onCreateView(
@@ -35,20 +36,15 @@ class TelegramAuthorizationFragment : Fragment(), TelegramApp.Callback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val logTextView = view.findViewById<TextView>(R.id.logTextView)
-        Toast.makeText(
-            activity,
-            telegramApp!!.getTelegramAuthorizationState().toString(),
-            Toast.LENGTH_SHORT
-        ).show()
-        logTextView.text = telegramApp!!.getTelegramAuthorizationState().toString()
+        logTextView.text = telegramApp?.getTelegramAuthorizationState().toString()
         view.findViewById<Button>(R.id.getCode).setOnClickListener {
             val phoneNumberView = view.findViewById<EditText>(R.id.phoneNumber)
-            telegramApp?.phoneNumber = phoneNumberView.text.toString()
+            telegramApp?.setPhoneNumber(phoneNumberView.text.toString())
             telegramApp?.changeAuthorizationState()
         }
         view.findViewById<Button>(R.id.applyCode).setOnClickListener {
             val codeView = view.findViewById<EditText>(R.id.code)
-            telegramApp?.verificationCode = codeView.text.toString()
+            telegramApp?.setVerificationCode(codeView.text.toString())
             telegramApp?.changeAuthorizationState()
         }
         view.findViewById<Button>(R.id.logOut).setOnClickListener {
@@ -56,11 +52,11 @@ class TelegramAuthorizationFragment : Fragment(), TelegramApp.Callback {
         }
     }
 
-    override fun onResult(`object`: TdApi.Object) {
-        when (`object`.constructor) {
+    override fun onResult(obj: TdApi.Object) {
+        when (obj.constructor) {
             TdApi.UpdateAuthorizationState.CONSTRUCTOR ->
                 telegramApp?.onAuthorizationStateUpdated(
-                    (`object` as TdApi.UpdateAuthorizationState).authorizationState
+                    (obj as TdApi.UpdateAuthorizationState).authorizationState
                 )
         }
     }
