@@ -34,9 +34,11 @@ class TelegramDataSource(private val client: Client) {
                     lastMessage?.id ?: offset.messageId
                 ),
                 limit,
-                TdApi.SearchMessagesFilterEmpty(),
-                minDate,
-                maxDate
+                SearchFilter(
+                    TdApi.SearchMessagesFilterEmpty(),
+                    minDate,
+                    maxDate
+                )
             ).messages.toList()
 
             val newChannelMessages = allMessages
@@ -62,9 +64,7 @@ class TelegramDataSource(private val client: Client) {
         query: String,
         offset: Offset = Offset(),
         limit: Int = 10,
-        filter: TdApi.SearchMessagesFilter = TdApi.SearchMessagesFilterEmpty(),
-        minDate: Int = 0,
-        maxDate: Int = 0
+        filter: SearchFilter
     ): TdApi.Messages = suspendCoroutine { cont ->
         client.send(
             TdApi.SearchMessages(
@@ -74,9 +74,9 @@ class TelegramDataSource(private val client: Client) {
                 offset.chatId,
                 offset.messageId,
                 limit,
-                filter,
-                minDate,
-                maxDate
+                filter.tgFilter,
+                filter.minDate,
+                filter.maxDate
             ),
             { response -> cont.resume(response as TdApi.Messages) },
             { e -> cont.resumeWithException(e) }
