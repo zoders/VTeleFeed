@@ -14,7 +14,7 @@ class TelegramDataSource(private val client: Client) {
 
     suspend fun getChannelsMessages(
         limit: Int,
-        offsetMessage: TdApi.Message? = null,
+        offset: Offset = Offset(),
         minDate: Int = 0,
         maxDate: Int = 0
     ): ChannelsMessages {
@@ -28,9 +28,11 @@ class TelegramDataSource(private val client: Client) {
 
             allMessages = searchMessages(
                 query,
-                lastMessage?.date ?: offsetMessage?.date ?: 0,
-                lastMessage?.chatId ?: offsetMessage?.chatId ?: 0L,
-                lastMessage?.id ?: offsetMessage?.id ?: 0L,
+                Offset(
+                    lastMessage?.date ?: offset.date,
+                    lastMessage?.chatId ?: offset.chatId,
+                    lastMessage?.id ?: offset.messageId
+                ),
                 limit,
                 TdApi.SearchMessagesFilterEmpty(),
                 minDate,
@@ -58,9 +60,7 @@ class TelegramDataSource(private val client: Client) {
 
     private suspend fun searchMessages(
         query: String,
-        offsetDate: Int = 0,
-        offsetChatId: Long = 0L,
-        offsetMessageId: Long = 0L,
+        offset: Offset = Offset(),
         limit: Int = 10,
         filter: TdApi.SearchMessagesFilter = TdApi.SearchMessagesFilterEmpty(),
         minDate: Int = 0,
@@ -70,9 +70,9 @@ class TelegramDataSource(private val client: Client) {
             TdApi.SearchMessages(
                 TdApi.ChatListMain(),
                 query,
-                offsetDate,
-                offsetChatId,
-                offsetMessageId,
+                offset.date,
+                offset.chatId,
+                offset.messageId,
                 limit,
                 filter,
                 minDate,
