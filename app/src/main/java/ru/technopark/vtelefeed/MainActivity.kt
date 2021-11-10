@@ -75,7 +75,8 @@ class MainActivity : AppCompatActivity() {
                             .error(R.drawable.user_placeholder)
                             .into(vkAvatarIV)
                     }
-                    else {
+                    else
+                    {
                         vkAvatarIV.setImageResource(R.drawable.user_placeholder)
                     }
                 }
