@@ -57,7 +57,12 @@ class TelegramDataSource(private val client: Client) {
             channelMessages.addAll(newChannelMessages)
         }
 
-        return ChannelsMessages(channelMessages, allMessages.last())
+        val lastMessage = allMessages.last()
+
+        return ChannelsMessages(
+            channelMessages,
+            Offset(lastMessage.date, lastMessage.chatId, lastMessage.id)
+        )
     }
 
     private suspend fun searchMessages(
