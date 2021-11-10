@@ -28,35 +28,37 @@ class VKLoginActivity : AppCompatActivity() {
 
         val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
-                Toast.makeText(this@VKLoginActivity,
+                Toast.makeText(
+                    this@VKLoginActivity,
                     "Success!",
-                    Toast.LENGTH_LONG)
-                    .show()
+                    Toast.LENGTH_LONG
+                ).show()
                 MainActivity.startFrom(this@VKLoginActivity)
                 finish()
             }
 
             override fun onLoginFailed(authException: VKAuthException) {
-                Toast.makeText(this@VKLoginActivity,
+                Toast.makeText(
+                    this@VKLoginActivity,
                     "Try again :(",
-                    Toast.LENGTH_LONG)
-                    .show()
+                    Toast.LENGTH_LONG
+                ).show()
                 val descriptionResource =
                     if (authException.webViewError == WebViewClient.ERROR_HOST_LOOKUP)
                         R.string.message_connection_error
-                    else R.string.message_unknown_error
+                    else
+                        R.string.message_unknown_error
                 AlertDialog.Builder(this@VKLoginActivity)
                     .setMessage(descriptionResource)
                     .setPositiveButton(R.string.vk_retry) { _, _ ->
-                        VK.login(this@VKLoginActivity,
-                                arrayListOf(VKScope.WALL,
-                                VKScope.PHOTOS)
+                        VK.login(
+                            this@VKLoginActivity,
+                            arrayListOf(VKScope.WALL, VKScope.PHOTOS)
                         )
                     }
                     .setNegativeButton(android.R.string.cancel) { dialog, _ ->
                         dialog.dismiss()
-                    }
-                    .show()
+                    }.show()
             }
         }
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
