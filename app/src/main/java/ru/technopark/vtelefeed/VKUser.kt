@@ -52,5 +52,4 @@ data class VKUser(
             deactivated = json.optBoolean("deactivated", false)
         )
     }
-
 }

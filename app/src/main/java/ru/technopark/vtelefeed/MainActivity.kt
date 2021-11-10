@@ -59,27 +59,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun requestVKUser() {
-        VK.execute(VKUserCommand(), object : VKApiCallback<VKUser> {
-            override fun success(result: VKUser) {
-                val vkNameButton = findViewById<TextView>(R.id.button_name_vk)
-                vkNameButton.text = "${result.firstName} ${result.lastName}"
-                val vkAvatarIV = findViewById<ImageView>(R.id.image_vk_profile_pic)
+    private fun requestVKUser() {
+        VK.execute(VKUserCommand(),
+                object : VKApiCallback<VKUser> {
+                override fun success(result: VKUser) {
+                    val vkNameButton = findViewById<TextView>(R.id.button_name_vk)
+                    vkNameButton.text = "${result.firstName} ${result.lastName}"
+                    val vkAvatarIV = findViewById<ImageView>(R.id.image_vk_profile_pic)
 
-                if (!TextUtils.isEmpty(result.photo)) {
-                    Glide.with(this@MainActivity)
-                        .load(result.photo)
-                        .transform(RoundedCorners(16))
-                        .error(R.drawable.user_placeholder)
-                        .into(vkAvatarIV)
-                } else {
-                    vkAvatarIV.setImageResource(R.drawable.user_placeholder)
+                    if (!TextUtils.isEmpty(result.photo)) {
+                        Glide.with(this@MainActivity)
+                            .load(result.photo)
+                            .transform(RoundedCorners(16))
+                            .error(R.drawable.user_placeholder)
+                            .into(vkAvatarIV)
+                    } else {
+                        vkAvatarIV.setImageResource(R.drawable.user_placeholder)
+                    }
+                }
+
+                override fun fail(error: Exception) {
+                    Log.e(TAG, error.toString())
                 }
             }
-
-            override fun fail(error: Exception) {
-                Log.e(TAG, error.toString())
-            }
-        })
+        )
     }
 }
