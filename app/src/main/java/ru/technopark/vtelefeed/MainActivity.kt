@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
 import ru.technopark.vtelefeed.databinding.ActivityMainBinding
@@ -20,7 +19,7 @@ import ru.technopark.vtelefeed.databinding.ActivityMainBinding
  */
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity::class.java.simpleName
+    private val tag = MainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +70,6 @@ class MainActivity : AppCompatActivity() {
                     if (!TextUtils.isEmpty(result.photo)) {
                         Glide.with(this@MainActivity)
                             .load(result.photo)
-                            .transform(RoundedCorners(16))
                             .error(R.drawable.user_placeholder)
                             .into(vkAvatarIV)
                     } else {
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun fail(error: Exception) {
-                    Log.e(TAG, error.toString())
+                    Log.e(tag, error.toString())
                 }
             }
         )
