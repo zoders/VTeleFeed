@@ -4,30 +4,97 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Views.MainActivity">
+        tools:context=".MainActivity">
 
-    <LinearLayout
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+                android:orientation="vertical"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
 
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="60dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-        <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="*Посты*"
-                android:textSize="30sp"
-            />
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center">
 
-    </LinearLayout>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/greetings"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="10dp"
+                    />
+
+            <LinearLayout
+                    android:orientation="horizontal"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+
+                <ImageView
+                        android:id="@+id/image_vk_profile_pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginEnd="5dp"
+                        tools:background="@color/design_default_color_primary_dark"/>
+
+                <Button
+                        android:id="@+id/button_login_vk"
+                        android:layout_width="230dp"
+                        android:layout_height="50dp"
+                        android:text="@string/vk_login"/>
+                <ImageButton
+                        android:id="@+id/imbutton_vk_logout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:background="@color/white"
+                        android:src="@drawable/round_logout_24"
+                        android:visibility="invisible"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                <ImageView
+                        android:id="@+id/image_vk_telegram_pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginEnd="5dp"
+                        tools:background="@color/design_default_color_primary_dark"/>
+
+                <Button
+                        android:id="@+id/button_login_telegram"
+                        android:layout_width="230dp"
+                        android:layout_height="50dp"
+                        tools:text="@string/telegram_logout"
+                        android:text="@string/telegram_login"/>
+
+                <ImageButton
+                        android:id="@+id/imbutton_telegram_logout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:background="@color/white"
+                        android:src="@drawable/round_logout_24"
+                        android:visibility="invisible"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
