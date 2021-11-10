@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">VTeleFeed</string>
+    <string name="vk_login">Войти в ВК</string>
+    <string name="telegram_login">Войти в Telegram</string>
+    <string name="vk_logout">Выйти из ВК</string>
+    <string name="telegram_logout">Выйти из Telegram</string>
+    <string name="greetings">Добро пожаловать в VTeleFeed!</string>
+    <string name="message_connection_error">Ошибка подключения</string>
+    <string name="message_unknown_error">Неизвестная ошибка, попробуйте позже</string>
 </resources>
