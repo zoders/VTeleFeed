@@ -12,7 +12,7 @@ class VTeleFeedApplication: Application() {
 
     private val tokenTracker = object: VKTokenExpiredHandler {
         override fun onTokenExpired() {
-            // token expired
+            MainActivity.startFrom(this@VTeleFeedApplication)
         }
     }
 }
