@@ -21,7 +21,7 @@ class VKLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        VK.login(this@VKLoginActivity, arrayListOf(VKScope.WALL, VKScope.PHOTOS))
+        VK.login(this@VKLoginActivity, arrayListOf(VKScope.WALL, VKScope.PHOTOS, VKScope.FRIENDS))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -53,7 +53,7 @@ class VKLoginActivity : AppCompatActivity() {
                     .setPositiveButton(R.string.vk_retry) { _, _ ->
                         VK.login(
                             this@VKLoginActivity,
-                            arrayListOf(VKScope.WALL, VKScope.PHOTOS)
+                            arrayListOf(VKScope.WALL, VKScope.PHOTOS, VKScope.FRIENDS)
                         )
                     }
                     .setNegativeButton(android.R.string.cancel) { dialog, _ ->

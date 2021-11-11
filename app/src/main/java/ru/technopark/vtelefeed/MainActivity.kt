@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         val mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
 
         if (VK.isLoggedIn()) {
+            requestVKPosts() //обращение к серверу из ui потока?
             val user: VKUser
             mainActivityBinding.imbuttonVkLogout.visibility = View.VISIBLE
             mainActivityBinding.buttonNameVk.visibility = View.VISIBLE
@@ -74,6 +75,23 @@ class MainActivity : AppCompatActivity() {
                             .into(vkAvatarIV)
                     } else {
                         vkAvatarIV.setImageResource(R.drawable.user_placeholder)
+                    }
+                }
+
+                override fun fail(error: Exception) {
+                    Log.e(tag, error.toString())
+                }
+            }
+        )
+    }
+
+    private fun requestVKPosts(){
+        VK.execute(
+            VKPostsCommand(),
+            object : VKApiCallback<List<VKPost>> {
+                override fun success(result: List<VKPost>) {
+                    if (!isFinishing && !result.isEmpty()) {
+                        // обработка результата
                     }
                 }
 
