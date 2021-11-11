@@ -2,12 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
-    <fragment
-            android:id="@+id/cat_fragment"
-            android:name="ru.technopark.vtelefeed.TelegramAuthorizationFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

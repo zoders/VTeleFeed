@@ -5,4 +5,9 @@
     <string name="log_out">Log out</string>
     <string name="send_code">Отправить код</string>
     <string name="get_code">Получить код</string>
+    <string name="enter_phone_number">Введите номер телефона</string>
+    <string name="please_enter_phone_number">Пожалуйста, введите номер телефона, который привязан к вашему Telegram</string>
+    <string name="check_telegram_messenger">Проверьте сообщения в Telegram</string>
+    <string name="code_has_been_sent">Вам был отправлен код в приложении Telegram.</string>
+    <string name="welcome">Добро пожаловать, NULL!</string>
 </resources>
