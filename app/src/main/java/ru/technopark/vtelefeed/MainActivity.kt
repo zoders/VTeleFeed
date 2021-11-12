@@ -14,9 +14,7 @@ import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
 import ru.technopark.vtelefeed.databinding.ActivityMainBinding
 
-/**
- * Created by Ilya Deydysh on 09.11.2021.
- */
+
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
