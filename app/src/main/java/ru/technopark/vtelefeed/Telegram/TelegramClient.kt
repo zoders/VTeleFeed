@@ -20,6 +20,7 @@ class TelegramClient {
                 return telegram!!
             }
         const val TAG = "TelegramClient"
+        private const val IGNORED_ERROR_CODE = 406
     }
     var appDir: String = ""
         get() = field
@@ -29,6 +30,7 @@ class TelegramClient {
     private var authorizationState: TdApi.AuthorizationState? = null
     private var authorizationRequestHandler: UpdateHandler? = null
     private var telegramAuthorizationRequestHandler: TelegramAuthorizationRequestHandler? = null
+
     private var created = false
     fun createClient() {
         if (!created) {
@@ -80,15 +82,15 @@ class TelegramClient {
                                 false
                             )
                         ),
-                        null
+                        AuthorizationRequestHandler()
                     )
                     TelegramAuthenticationParameterType.CODE -> client!!.send(
                         TdApi.CheckAuthenticationCode(parameterValue),
-                        null
+                        AuthorizationRequestHandler()
                     )
                     TelegramAuthenticationParameterType.PASSWORD -> client!!.send(
                         TdApi.CheckAuthenticationPassword(parameterValue),
-                        null
+                        AuthorizationRequestHandler()
                     )
                 }
             }
@@ -119,11 +121,11 @@ class TelegramClient {
                 parameters.deviceModel = "Android"
                 parameters.applicationVersion = "1.0"
                 parameters.enableStorageOptimizer = true
-                client?.send(TdApi.SetTdlibParameters(parameters), null)
+                client?.send(TdApi.SetTdlibParameters(parameters), AuthorizationRequestHandler())
             }
             TdApi.AuthorizationStateWaitEncryptionKey.CONSTRUCTOR -> client?.send(
                 TdApi.CheckDatabaseEncryptionKey(),
-                null
+                AuthorizationRequestHandler()
             )
             TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR -> {
                 telegramAuthorizationRequestHandler?.telegramAuthorizationRequestListener
@@ -281,6 +283,24 @@ class TelegramClient {
                         (obj as TdApi.UpdateAuthorizationState).authorizationState
                     )
             }
+        }
+    }
+    private inner class AuthorizationRequestHandler : Client.ResultHandler {
+        override fun onResult(obj: TdApi.Object) {
+            when (obj.constructor) {
+                TdApi.Error.CONSTRUCTOR -> {
+                    Log.e(TAG,"Receive an error: $obj")
+                    val errorObj = obj as TdApi.Error
+                    if (errorObj.code != IGNORED_ERROR_CODE) {
+                        telegramAuthorizationRequestHandler?.telegramAuthorizationRequestListener
+                            ?.onTelegramAuthorizationRequestError(errorObj.code, errorObj.message)
+                        onAuthorizationStateUpdated(null) // repeat last action
+                    }
+                }
+                TdApi.Ok.CONSTRUCTOR -> {
+                }
+                else -> Log.e(TAG,"Receive wrong response from TDLib: $obj")
+            }// result is already received through UpdateAuthorizationState, nothing to do
         }
     }
 }
