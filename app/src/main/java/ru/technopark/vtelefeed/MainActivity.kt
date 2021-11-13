@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
+
     private val telegramClient: TelegramClient = TelegramClient.instance
-    var telegramAuthorizationRequestHandler: TelegramClient.TelegramAuthorizationRequestHandler? = null
+
+    private var telegramAuthorizationRequestHandler: TelegramClient.TelegramAuthorizationRequestHandler? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,6 +52,12 @@ class MainActivity : AppCompatActivity() {
                     TelegramAuthorizationFragment.Companion.LoginDialogType.ENTER_CODE
                 )
             }
+            TelegramClient.TelegramAuthenticationParameterType.PASSWORD -> {
+                TelegramAuthorizationFragment.showDialog(
+                    supportFragmentManager,
+                    TelegramAuthorizationFragment.Companion.LoginDialogType.ENTER_PASSWORD
+                )
+            }
             TelegramClient.TelegramAuthenticationParameterType.READY -> {
                 TelegramAuthorizationFragment.showDialog(
                     supportFragmentManager,
@@ -79,6 +87,15 @@ class MainActivity : AppCompatActivity() {
                         TelegramClient
                             .TelegramAuthenticationParameterType
                             .CODE,
+                        text
+                    )
+            }
+            TelegramAuthorizationFragment.Companion.LoginDialogType.ENTER_PASSWORD -> {
+                telegramAuthorizationRequestHandler
+                    ?.applyAuthenticationParameter(
+                        TelegramClient
+                            .TelegramAuthenticationParameterType
+                            .PASSWORD,
                         text
                     )
             }

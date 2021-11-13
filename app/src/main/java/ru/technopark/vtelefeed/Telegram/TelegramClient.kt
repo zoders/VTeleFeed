@@ -29,6 +29,18 @@ class TelegramClient {
     private var authorizationState: TdApi.AuthorizationState? = null
     private var authorizationRequestHandler: UpdateHandler? = null
     private var telegramAuthorizationRequestHandler: TelegramAuthorizationRequestHandler? = null
+    private var created = false
+    fun createClient() {
+        if (!created) {
+            authorizationRequestHandler = UpdateHandler()
+            client = Client.create(
+                authorizationRequestHandler,
+                null,
+                null
+            )
+            created = true
+        }
+    }
 
     // Сраный Detekt не дает сделать больше 10 методов. Это так критично?
     /*
@@ -42,15 +54,6 @@ class TelegramClient {
     }
     */
 
-    fun createClient() {
-        authorizationRequestHandler = UpdateHandler()
-        client = Client.create(
-            authorizationRequestHandler,
-            null,
-            null
-        )
-    }
-
     fun changeAuthorizationState() {
         client?.send(TdApi.GetAuthorizationState()) { obj ->
             if (obj is TdApi.AuthorizationState) {
@@ -59,7 +62,9 @@ class TelegramClient {
         }
     }
 
-    inner class TelegramAuthorizationRequestHandler(val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener) {
+    inner class TelegramAuthorizationRequestHandler(
+        val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener
+        ) {
         fun applyAuthenticationParameter(
             parameterType: TelegramAuthenticationParameterType,
             parameterValue: String
@@ -79,6 +84,10 @@ class TelegramClient {
                     )
                     TelegramAuthenticationParameterType.CODE -> client!!.send(
                         TdApi.CheckAuthenticationCode(parameterValue),
+                        null
+                    )
+                    TelegramAuthenticationParameterType.PASSWORD -> client!!.send(
+                        TdApi.CheckAuthenticationPassword(parameterValue),
                         null
                     )
                 }
@@ -135,21 +144,19 @@ class TelegramClient {
                         TelegramAuthenticationParameterType.READY
                     )
             }
-            TdApi.AuthorizationStateLoggingOut.CONSTRUCTOR -> {
-                // Logging out
-            }
-            TdApi.AuthorizationStateClosing.CONSTRUCTOR -> {
-                // Closing
+            TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR -> {
+                telegramAuthorizationRequestHandler?.telegramAuthorizationRequestListener
+                    ?.onRequestTelegramAuthenticationParameter(
+                        TelegramAuthenticationParameterType.PASSWORD
+                    )
             }
             TdApi.AuthorizationStateClosed.CONSTRUCTOR -> {
-                // Closed
                 client = Client.create(
                     authorizationRequestHandler,
                     null,
                     null
                 )
             }
-            else -> {}
         }
         this.authorizationState = authorizationState
     }
@@ -157,6 +164,7 @@ class TelegramClient {
     enum class TelegramAuthenticationParameterType {
         PHONE_NUMBER,
         CODE,
+        PASSWORD,
         READY
     }
 
@@ -211,7 +219,7 @@ class TelegramClient {
         }
     }
 
-    private fun requestUserPhoto(user: TdApi.User) {
+    fun requestUserPhoto(user: TdApi.User) {
         val remotePhoto = user.profilePhoto?.big?.remote
         if (remotePhoto != null && remotePhoto.id.isNotEmpty()) {
             client!!.send(TdApi.GetRemoteFile(remotePhoto.id, null)) { obj ->
@@ -223,7 +231,7 @@ class TelegramClient {
                     TdApi.File.CONSTRUCTOR -> {
                         val file = obj as TdApi.File
                         client!!.send(
-                            TdApi.DownloadFile(file.id, requestPhotoPriority, 0, 0, true),
+                            TdApi.DownloadFile(file.id, requestPhotoPriority, 0, 0, false),
                             null,
                             null
                         )

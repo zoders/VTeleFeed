@@ -6,20 +6,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-
-        <!--<data>
-                <variable
-                        name="viewModel"
-                        type="ru.technopark.vtelefeed.TelegramAuthorizationViewModel" />
-
-        </data>-->
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/enter_phone_number_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="visible"
-                tools:visibility="visible"
+                tools:visibility="invisible"
                 android:layout_marginTop="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,6 +127,64 @@
                         app:vcNextWrapperColor="#0088cc"
                         app:vcWrapperStrokeWidth="2dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                        android:id="@+id/ic_password"
+                        android:layout_width="170dp"
+                        android:layout_height="170dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_password"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:inputType="textPassword"
+                        android:hint="Введите пароль"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        app:layout_constraintLeft_toLeftOf="@+id/ic_password"
+                        app:layout_constraintTop_toBottomOf="@+id/ic_password" />
+
+                <TextView
+                        android:id="@+id/text_please_password"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textSize="15sp"
+                        android:textColor="#808080"
+                        android:layout_margin="7dp"
+                        android:text="Пожалуйста введите пароль Telegram"
+                        app:layout_constraintTop_toBottomOf="@id/password"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/sendPasswordFab"
+                        android:backgroundTint="#99d9ea"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:srcCompat="@android:drawable/ic_menu_send"
+                        android:focusable="true" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ready_layout"
                 android:layout_width="match_parent"
