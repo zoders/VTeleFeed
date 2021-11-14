@@ -56,14 +56,6 @@ class TelegramClient {
     }
     */
 
-    fun changeAuthorizationState() {
-        client?.send(TdApi.GetAuthorizationState()) { obj ->
-            if (obj is TdApi.AuthorizationState) {
-                onAuthorizationStateUpdated(obj)
-            }
-        }
-    }
-
     inner class TelegramAuthorizationRequestHandler(
         val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener
         ) {
@@ -182,6 +174,41 @@ class TelegramClient {
         CLOSED
     }
 
+    fun applyAuthParam(
+        loginType: TelegramAuthorizationFragment.Companion.LoginType,
+        text: String
+    ) {
+        when (loginType) {
+            TelegramAuthorizationFragment.Companion.LoginType.ENTER_PHONE_NUMBER -> {
+                telegramAuthorizationRequestHandler
+                    ?.applyAuthenticationParameter(
+                        TelegramClient
+                            .TelegramAuthenticationParameterType
+                            .PHONE_NUMBER,
+                        text
+                    )
+            }
+            TelegramAuthorizationFragment.Companion.LoginType.ENTER_CODE -> {
+                telegramAuthorizationRequestHandler
+                    ?.applyAuthenticationParameter(
+                        TelegramClient
+                            .TelegramAuthenticationParameterType
+                            .CODE,
+                        text
+                    )
+            }
+            TelegramAuthorizationFragment.Companion.LoginType.ENTER_PASSWORD -> {
+                telegramAuthorizationRequestHandler
+                    ?.applyAuthenticationParameter(
+                        TelegramClient
+                            .TelegramAuthenticationParameterType
+                            .PASSWORD,
+                        text
+                    )
+            }
+        }
+    }
+
     fun getTelegramAuthorizationState(): TelegramAuthorizationState {
         val authorizationState = this.authorizationState
             ?: return TelegramAuthorizationState.UNKNOWN
@@ -207,7 +234,7 @@ class TelegramClient {
         }
     }
 
-    fun requestCurrentUser() {
+    private fun requestCurrentUser() {
         client?.send(TdApi.GetMe()) { obj ->
             when (obj.constructor) {
                 TdApi.Error.CONSTRUCTOR -> {
@@ -221,7 +248,7 @@ class TelegramClient {
         }
     }
 
-    fun requestUserPhoto(user: TdApi.User) {
+    private fun requestUserPhoto(user: TdApi.User) {
         val remotePhoto = user.profilePhoto?.big?.remote
         if (remotePhoto != null && remotePhoto.id.isNotEmpty()) {
             client!!.send(TdApi.GetRemoteFile(remotePhoto.id, null)) { obj ->
