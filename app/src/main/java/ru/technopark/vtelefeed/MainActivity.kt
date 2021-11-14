@@ -7,8 +7,6 @@ import ru.technopark.vtelefeed.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag = MainActivity::class.java.simpleName
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -18,4 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 }
