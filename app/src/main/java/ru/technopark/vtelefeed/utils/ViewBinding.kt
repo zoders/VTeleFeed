@@ -36,6 +36,8 @@ class ViewBindingFragmentDelegate<VB : ViewBinding>(
     }
 }
 
-fun <VB : ViewBinding> Fragment.viewBinding(inflateBinding: () -> VB): ViewBindingFragmentDelegate<VB> {
+fun <VB : ViewBinding> Fragment.viewBinding(
+    inflateBinding: () -> VB
+): ViewBindingFragmentDelegate<VB> {
     return ViewBindingFragmentDelegate(inflateBinding)
 }

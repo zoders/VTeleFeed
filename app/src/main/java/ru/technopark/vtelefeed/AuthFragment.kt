@@ -14,8 +14,9 @@ import ru.technopark.vtelefeed.utils.viewBinding
 
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
-    private val binding: FragmentAuthBinding by viewBinding { FragmentAuthBinding.bind(requireView()) }
-
+    private val binding: FragmentAuthBinding by viewBinding {
+        FragmentAuthBinding.bind(requireView())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +37,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 requestVKUser()
             }
         }
-
     }
 
     private fun updateVkLoginUI() {
