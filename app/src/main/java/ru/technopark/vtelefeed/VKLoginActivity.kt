@@ -33,7 +33,7 @@ class VKLoginActivity : AppCompatActivity() {
                     "Success!",
                     Toast.LENGTH_LONG
                 ).show()
-                MainActivity.startFrom(this@VKLoginActivity)
+//                MainActivity.startFrom(this@VKLoginActivity)
                 finish()
             }
 
