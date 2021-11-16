@@ -58,4 +58,9 @@ dependencies {
 
     // KTX
     implementation "androidx.fragment:fragment-ktx:1.3.6"
+
+    //For Telegram Authorization
+    implementation 'ru.tinkoff.decoro:decoro:1.1.1'
+    implementation 'com.github.gongw:verifycodeview:1.0.2'
 }
+
