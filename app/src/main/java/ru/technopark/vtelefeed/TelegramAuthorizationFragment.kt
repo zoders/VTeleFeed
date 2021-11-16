@@ -153,7 +153,6 @@ class TelegramAuthorizationFragment : Fragment() {
         private var fragment: TelegramAuthorizationFragment? = null
         private const val TAG = "TelegramAuthorizationFragment"
         var loginType: LoginType? = null
-        var rootViewId: Int = R.id.fragment_container
 
         enum class LoginType(val viewId: Int) {
             ENTER_PHONE_NUMBER(R.id.enter_phone_number_layout),
@@ -216,21 +215,12 @@ class TelegramAuthorizationFragment : Fragment() {
             supportFragmentManager: FragmentManager
         ) {
             if (fragment == null) {
-                /*val rootFr = supportFragmentManager.findFragmentByTag("TAG")
+                val rootFr = supportFragmentManager.findFragmentByTag("AuthFragment")
                 val id = rootFr?.id
                 fragment = newInstance()
                 supportFragmentManager.beginTransaction()
                     .replace(
                         id!!,
-                        fragment!!,
-                        TAG
-                    )
-                    .addToBackStack(null)
-                    .commit()*/
-                fragment = newInstance()
-                supportFragmentManager.beginTransaction()
-                    .replace(
-                        rootViewId,
                         fragment!!,
                         TAG
                     )
