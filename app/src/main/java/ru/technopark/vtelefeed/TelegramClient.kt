@@ -272,10 +272,11 @@ class TelegramClient {
 
     private fun hasLocalUserPhoto(user: TdApi.User): Boolean {
         val localPhoto = user.profilePhoto?.big?.local
+        val canBeDownloaded: Boolean = localPhoto?.canBeDownloaded!!
+        val isDownloadingCompleted: Boolean = localPhoto.isDownloadingCompleted
+        val pathIsNotEmpty: Boolean = localPhoto.path.isNotEmpty()
         return if (localPhoto != null) {
-            localPhoto.canBeDownloaded &&
-                    localPhoto.isDownloadingCompleted &&
-                    localPhoto.path.isNotEmpty()
+            canBeDownloaded && isDownloadingCompleted && pathIsNotEmpty
         } else {
             false
         }
