@@ -24,7 +24,6 @@ class TelegramAuthorizationFragment : Fragment() {
     private var telegramClient: TelegramClient = TelegramClient.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.title = ("Ваш Telegram")
         telegramClient.appDir = activity?.filesDir.toString()
         telegramClient.createClient()
         telegramAuthorizationRequestHandler = telegramClient.setTelegramAuthorizationRequestHandler(
@@ -134,7 +133,7 @@ class TelegramAuthorizationFragment : Fragment() {
                 val profilePic = view.findViewById<ImageView>(R.id.profilePic)
                 Glide.with(requireActivity())
                     .load(telegramClient.getUserPhotoPath(telegramClient.user))
-                    .error(R.drawable.default_userpic)
+                    .error(R.drawable.user_placeholder)
                     .into(profilePic)
                 val welcomeTextView = view.findViewById<TextView>(R.id.welcome)
                 if (telegramClient.user != null) {
@@ -216,6 +215,17 @@ class TelegramAuthorizationFragment : Fragment() {
             supportFragmentManager: FragmentManager
         ) {
             if (fragment == null) {
+                /*val rootFr = supportFragmentManager.findFragmentByTag("TAG")
+                val id = rootFr?.id
+                fragment = newInstance()
+                supportFragmentManager.beginTransaction()
+                    .replace(
+                        id!!,
+                        fragment!!,
+                        TAG
+                    )
+                    .addToBackStack(null)
+                    .commit()*/
                 fragment = newInstance()
                 supportFragmentManager.beginTransaction()
                     .replace(
