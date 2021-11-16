@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.VTeleFeed" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/vtelefeed_color</item>
-        <item name="colorPrimaryVariant">@color/vtelefeed_color</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -12,8 +12,5 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-    </style>
-    <style name="ShapeAppearanceOverlay.App.CornerSize" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="cornerSize">50%</item>
     </style>
 </resources>

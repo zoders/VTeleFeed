@@ -52,11 +52,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    // For Telegram Authorization
-    implementation 'com.github.gongw:verifycodeview:1.0.2'
-    implementation 'ru.tinkoff.decoro:decoro:1.1.1'
-
-
     // AAC
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
