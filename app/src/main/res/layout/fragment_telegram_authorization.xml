@@ -201,7 +201,7 @@
                         android:layout_width="170dp"
                         android:layout_height="170dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/default_userpic"
+                        android:src="@drawable/user_placeholder"
                         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
