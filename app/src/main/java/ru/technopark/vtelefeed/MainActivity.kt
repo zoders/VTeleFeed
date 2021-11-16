@@ -16,6 +16,16 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(mainActivityBinding.root)
 
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment == null) {
+            val fragment = PostListFragment.newInstance()
+            supportFragmentManager.beginTransaction().add(
+                R.id.fragment_container,
+                fragment
+            ).commit()
+        }
+
+
     }
 
     companion object {
