@@ -66,4 +66,7 @@ dependencies {
     //For Telegram Authorization
     implementation 'ru.tinkoff.decoro:decoro:1.1.1'
     implementation 'com.github.gongw:verifycodeview:1.0.2'
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 }
