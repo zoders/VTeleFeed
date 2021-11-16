@@ -56,9 +56,7 @@ class TelegramClient {
     }
     */
 
-    inner class TelegramAuthorizationRequestHandler(
-        val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener
-        ) {
+    inner class TelegramAuthorizationRequestHandler(val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener) {
         fun applyAuthenticationParameter(
             parameterType: TelegramAuthenticationParameterType,
             parameterValue: String
@@ -316,7 +314,7 @@ class TelegramClient {
         override fun onResult(obj: TdApi.Object) {
             when (obj.constructor) {
                 TdApi.Error.CONSTRUCTOR -> {
-                    Log.e(TAG,"Receive an error: $obj")
+                    Log.e(TAG, "Receive an error: $obj")
                     val errorObj = obj as TdApi.Error
                     if (errorObj.code != IGNORED_ERROR_CODE) {
                         telegramAuthorizationRequestHandler?.telegramAuthorizationRequestListener
@@ -326,8 +324,8 @@ class TelegramClient {
                 }
                 TdApi.Ok.CONSTRUCTOR -> {
                 }
-                else -> Log.e(TAG,"Receive wrong response from TDLib: $obj")
-            }// result is already received through UpdateAuthorizationState, nothing to do
+                else -> Log.e(TAG, "Receive wrong response from TDLib: $obj")
+            }
         }
     }
 }

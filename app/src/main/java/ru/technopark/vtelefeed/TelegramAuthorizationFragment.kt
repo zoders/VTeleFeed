@@ -20,7 +20,8 @@ import ru.tinkoff.decoro.watchers.FormatWatcher
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
 class TelegramAuthorizationFragment : Fragment() {
-    private var telegramAuthorizationRequestHandler: TelegramClient.TelegramAuthorizationRequestHandler? = null
+    private var telegramAuthorizationRequestHandler: TelegramClient
+    .TelegramAuthorizationRequestHandler? = null
     private var telegramClient: TelegramClient = TelegramClient.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,8 @@ class TelegramAuthorizationFragment : Fragment() {
         telegramAuthorizationRequestHandler = telegramClient.setTelegramAuthorizationRequestHandler(
             object : TelegramClient.TelegramAuthorizationRequestListener {
                 override fun onRequestTelegramAuthenticationParameter(
-                    telegramAuthenticationParameterType: TelegramClient.TelegramAuthenticationParameterType
+                    telegramAuthenticationParameterType: TelegramClient
+                    .TelegramAuthenticationParameterType
                 ) {
                     showTelegramLogin(telegramAuthenticationParameterType)
                 }
@@ -144,7 +146,6 @@ class TelegramAuthorizationFragment : Fragment() {
                         "Добро пожаловать, " + telegramClient.user!!.username.toString() + '!'
                 }
             }
-
         }
     }
 
