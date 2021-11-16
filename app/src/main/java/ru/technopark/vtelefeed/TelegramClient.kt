@@ -56,7 +56,9 @@ class TelegramClient {
     }
     */
 
-    inner class TelegramAuthorizationRequestHandler(val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener) {
+    inner class TelegramAuthorizationRequestHandler(
+        val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener
+    ) {
         fun applyAuthenticationParameter(
             parameterType: TelegramAuthenticationParameterType,
             parameterValue: String
