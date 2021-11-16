@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">VTeleFeed</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="log_out">Log out</string>
+    <string name="app_name">VTeleFeed</string>
+    <string name="vk_login">Войти в ВК</string>
+    <string name="telegram_login">Войти в Telegram</string>
+    <string name="vk_logout">Выйти из ВК</string>
+    <string name="telegram_logout">Выйти из Telegram</string>
+    <string name="greetings">Добро пожаловать в VTeleFeed!</string>
+    <string name="message_connection_error">Ошибка подключения</string>
+    <string name="message_unknown_error">Неизвестная ошибка, попробуйте позже</string>
     <string name="send_code">Отправить код</string>
     <string name="get_code">Получить код</string>
     <string name="enter_phone_number">Введите номер телефона</string>
