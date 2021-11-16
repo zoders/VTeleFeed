@@ -32,7 +32,18 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 VK.logout()
                 updateVkLoginUI()
             }
-
+            buttonLoginTelegram.setOnClickListener {
+                val rootFr = activity?.supportFragmentManager?.findFragmentByTag("AuthFragment")
+                val id = rootFr?.id
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(
+                        id!!,
+                        TelegramAuthorizationFragment(),
+                        "TelegramAuthorizationFragment"
+                    )
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
             if (VK.isLoggedIn()) {
                 requestVKUser()
             }

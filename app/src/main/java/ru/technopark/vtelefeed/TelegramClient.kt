@@ -49,12 +49,10 @@ class TelegramClient {
     fun close() {
         client!!.send(TdApi.Close(), null, null)
     }
-
+    */
     fun logOut() {
         client?.send(TdApi.LogOut(), null, null)
-        changeAuthorizationState()
     }
-    */
 
     inner class TelegramAuthorizationRequestHandler(
         val telegramAuthorizationRequestListener: TelegramAuthorizationRequestListener
@@ -209,7 +207,7 @@ class TelegramClient {
         }
     }
 
-    fun getTelegramAuthorizationState(): TelegramAuthorizationState {
+    /*fun getTelegramAuthorizationState(): TelegramAuthorizationState {
         val authorizationState = this.authorizationState
             ?: return TelegramAuthorizationState.UNKNOWN
         return when (authorizationState.constructor) {
@@ -232,7 +230,7 @@ class TelegramClient {
             else ->
                 TelegramAuthorizationState.UNKNOWN
         }
-    }
+    }*/
 
     private fun requestCurrentUser() {
         client?.send(TdApi.GetMe()) { obj ->
