@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.concurrent.Executors
 
 class PostListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
@@ -29,16 +27,11 @@ class PostListFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = PostAdapter(postStorage.posts, PostDiffer())
-        val factory = PostSourceFactory(postStorage)
-        val config = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(20).build()
-        val pagedListLiveData = LivePagedListBuilder(factory, config)
-            .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
-/*
-        )*/
+
 
         postStorage.authState.observe(viewLifecycleOwner) { isReady ->
             if (isReady) {
-                pagedListLiveData.observe(
+                postStorage.pagedListLiveData.observe(
                     viewLifecycleOwner,
                     object : Observer<PagedList<Post>> {
                         override fun onChanged(t: PagedList<Post>?) {

@@ -3,8 +3,11 @@ package ru.technopark.vtelefeed
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.paging.PositionalDataSource
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 private const val PEREMENNAYA_S_PONYATNYM_NAZVANIEM_SPECIALNO_DLYA_STATIC_ANALYSIS = 20
 
@@ -18,6 +21,15 @@ class PostStorage : ViewModel() {
 
     val posts = mutableListOf<Post>()
     val authState: LiveData<Boolean> = tgClient.authReadyLiveData
+
+    val pagedListLiveData: LiveData<PagedList<Post>>
+
+    init {
+        val factory = PostSourceFactory(this)
+        val config = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(20).build()
+        pagedListLiveData = LivePagedListBuilder(factory, config)
+            .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
+    }
 
     fun loadInitialPosts(
         requestedStartPosition: Int,

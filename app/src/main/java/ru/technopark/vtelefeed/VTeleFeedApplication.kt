@@ -8,8 +8,7 @@ class VTeleFeedApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         VK.addTokenExpiredHandler(tokenTracker)
-        TelegramClient.instance.appDir = filesDir.absolutePath
-        TelegramClient.instance.createClient()
+        TelegramClient.instance.createClient(this)
     }
 
     private val tokenTracker = object : VKTokenExpiredHandler {

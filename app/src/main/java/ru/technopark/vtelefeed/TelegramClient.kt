@@ -1,5 +1,6 @@
 package ru.technopark.vtelefeed
 
+import android.content.Context
 import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -37,7 +38,7 @@ class TelegramClient {
     private val _authReadyLiveData = MutableLiveData(false)
     val authReadyLiveData: LiveData<Boolean> = _authReadyLiveData
 
-    fun createClient() {
+    fun createClient(context: Context) {
         if (!created) {
             authorizationRequestHandler = UpdateHandler()
             client = Client.create(
@@ -45,6 +46,7 @@ class TelegramClient {
                 null,
                 null
             )
+            appDir = context.filesDir.absolutePath
             created = true
         }
 
