@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.drinkless.td.libcore.telegram.TdApi
+import java.text.SimpleDateFormat
 import java.util.*
 
 class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,6 +27,8 @@ class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
 
         vkOrTgImageView.setImageResource(R.drawable.tg)
-        datePost.text = Date(post.tgPost.date.toLong()).toString()
+        val date = Date(post.tgPost.date * 1000L)
+        val dateText = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault()).format(date)
+        datePost.text = dateText
     }
 }

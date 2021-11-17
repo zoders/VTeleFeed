@@ -5,7 +5,7 @@ import androidx.paging.PositionalDataSource
 
 private const val TAG = "PostDataSource"
 
-class PostDataSource(val postStorage: PostStorage) : PositionalDataSource<Post>() {
+class PostDataSource(private val postStorage: PostStorage) : PositionalDataSource<Post>() {
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Post>) {
         Log.d(
             TAG,
