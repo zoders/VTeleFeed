@@ -1,49 +1,39 @@
 package ru.technopark.vtelefeed
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import ru.technopark.vtelefeed.databinding.FragmentPostListBinding
+import ru.technopark.vtelefeed.utils.viewBinding
 
-class PostListFragment : Fragment() {
-    private lateinit var recyclerView: RecyclerView
-    private var adapter: PostAdapter? = null
+class PostListFragment : Fragment(R.layout.fragment_post_list) {
+
+    private val binding: FragmentPostListBinding by viewBinding {
+        FragmentPostListBinding.bind(requireView())
+    }
+
     private val postStorage: PostStorage by lazy {
         ViewModelProvider(this)[PostStorage::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_post_list, container, false)
-        recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = PostAdapter(postStorage.posts, PostDiffer())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+
+        val adapter = PostAdapter(postStorage.posts, PostDiffer())
+        binding.recyclerView.adapter = adapter
 
         postStorage.authState.observe(viewLifecycleOwner) { isReady ->
             if (isReady) {
                 postStorage.pagedListLiveData.observe(
                     viewLifecycleOwner,
-                    object : Observer<PagedList<Post>> {
-                        override fun onChanged(t: PagedList<Post>?) {
-                            adapter?.submitList(t) ?: throw NullPointerException()
-                        }
-                    })
+                    adapter::submitList
+                )
             }
         }
-
-
-        recyclerView.adapter = adapter
-        return view
     }
 
     companion object {
