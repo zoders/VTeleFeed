@@ -26,7 +26,8 @@ class PostStorage : ViewModel() {
 
     init {
         val factory = PostSourceFactory(this)
-        val config = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(20).build()
+        val config =
+            PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(PAGE_SIZE).build()
         pagedListLiveData = LivePagedListBuilder(factory, config)
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
     }
@@ -65,4 +66,8 @@ class PostStorage : ViewModel() {
         if (startPosition == PEREMENNAYA_S_PONYATNYM_NAZVANIEM_SPECIALNO_DLYA_STATIC_ANALYSIS)
             emptyList()
         else posts.subList(startPosition, startPosition + loadSize)
+
+    companion object {
+        private const val PAGE_SIZE = 20
+    }
 }

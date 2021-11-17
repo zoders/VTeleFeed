@@ -28,8 +28,12 @@ class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
 
         vkOrTgImageView.setImageResource(R.drawable.tg)
-        val date = Date(post.tgPost.date * 1000L)
+        val date = Date(post.tgPost.date * MILLIS_IN_SECOND)
         val dateText = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault()).format(date)
         datePost.text = dateText
+    }
+
+    companion object {
+        private const val MILLIS_IN_SECOND = 1000L
     }
 }
