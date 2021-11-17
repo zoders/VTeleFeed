@@ -1,5 +1,6 @@
 package ru.technopark.vtelefeed
 
+import android.util.Log
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
@@ -54,6 +55,8 @@ class TelegramDataSource(private val client: Client) {
                 }
                 .map { it.first }
 
+            Log.i(TAG, newChannelMessages.toString())
+
             channelMessages.addAll(newChannelMessages)
         }
 
@@ -94,5 +97,9 @@ class TelegramDataSource(private val client: Client) {
             { response -> cont.resume(response as TdApi.Chat) },
             { e -> cont.resumeWithException(e) }
         )
+    }
+
+    companion object {
+        private const val TAG = "TelegramDataSource"
     }
 }

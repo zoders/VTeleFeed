@@ -1,10 +1,7 @@
 package ru.technopark.vtelefeed
 
-import java.util.Date
+import org.drinkless.td.libcore.telegram.TdApi
 
 data class Post(
-    var id: Int = 0,
-    var fromVkOrTg: Int = 0,
-    var text: String = "",
-    var date: Date = Date()
+    val tgPost: TdApi.Message
 )

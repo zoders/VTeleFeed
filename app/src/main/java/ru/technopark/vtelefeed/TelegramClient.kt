@@ -1,10 +1,13 @@
 package ru.technopark.vtelefeed
 
+import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import java.io.File
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.drinkless.td.libcore.telegram.Client
 import org.drinkless.td.libcore.telegram.TdApi
+import java.io.File
 
 class TelegramClient {
     companion object {
@@ -22,17 +25,20 @@ class TelegramClient {
         const val TAG = "TelegramClient"
         private const val IGNORED_ERROR_CODE = 406
     }
+
     var appDir: String = ""
-        get() = field
-        set(value) { field = value }
     var user: TdApi.User? = null
-    private var client: Client? = null
+    var client: Client? = null
     private var authorizationState: TdApi.AuthorizationState? = null
     private var authorizationRequestHandler: UpdateHandler? = null
     private var telegramAuthorizationRequestHandler: TelegramAuthorizationRequestHandler? = null
 
     private var created = false
-    fun createClient() {
+
+    private val _authReadyLiveData = MutableLiveData(false)
+    val authReadyLiveData: LiveData<Boolean> = _authReadyLiveData
+
+    fun createClient(context: Context) {
         if (!created) {
             authorizationRequestHandler = UpdateHandler()
             client = Client.create(
@@ -40,6 +46,7 @@ class TelegramClient {
                 null,
                 null
             )
+            appDir = context.filesDir.absolutePath
             created = true
         }
     }
@@ -135,6 +142,7 @@ class TelegramClient {
                     ?.onRequestTelegramAuthenticationParameter(
                         TelegramAuthenticationParameterType.READY
                     )
+                _authReadyLiveData.postValue(true)
             }
             TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR -> {
                 telegramAuthorizationRequestHandler?.telegramAuthorizationRequestListener
@@ -300,6 +308,7 @@ class TelegramClient {
         fun onRequestTelegramAuthenticationParameter(
             telegramAuthenticationParameterType: TelegramAuthenticationParameterType
         )
+
         fun onTelegramAuthorizationRequestError(code: Int, message: String)
     }
 
@@ -313,6 +322,7 @@ class TelegramClient {
             }
         }
     }
+
     private inner class AuthorizationRequestHandler : Client.ResultHandler {
         override fun onResult(obj: TdApi.Object) {
             when (obj.constructor) {

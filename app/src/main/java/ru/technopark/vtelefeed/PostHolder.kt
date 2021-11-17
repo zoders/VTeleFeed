@@ -4,6 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.drinkless.td.libcore.telegram.TdApi
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
     private lateinit var post: Post
@@ -13,8 +17,23 @@ class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(post: Post) {
         this.post = post
-        vkOrTgImageView.setImageResource(post.fromVkOrTg)
-        textPost.text = post.text
-        datePost.text = post.date.toString()
+
+        val content = post.tgPost.content
+
+        textPost.text = when (content) {
+            is TdApi.MessageText -> content.text.text
+            is TdApi.MessagePhoto -> content.caption.text
+            is TdApi.MessageVideo -> content.caption.text
+            else -> "-- no text --"
+        }
+
+        vkOrTgImageView.setImageResource(R.drawable.tg)
+        val date = Date(post.tgPost.date * MILLIS_IN_SECOND)
+        val dateText = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault()).format(date)
+        datePost.text = dateText
+    }
+
+    companion object {
+        private const val MILLIS_IN_SECOND = 1000L
     }
 }
