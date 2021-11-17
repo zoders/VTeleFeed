@@ -49,7 +49,6 @@ class TelegramClient {
             appDir = context.filesDir.absolutePath
             created = true
         }
-
     }
 
     // Сраный Detekt не дает сделать больше 10 методов. Это так критично?

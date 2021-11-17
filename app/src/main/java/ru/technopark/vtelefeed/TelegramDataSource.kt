@@ -102,5 +102,4 @@ class TelegramDataSource(private val client: Client) {
     companion object {
         private const val TAG = "TelegramDataSource"
     }
-
 }

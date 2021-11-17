@@ -10,7 +10,7 @@ class PostDataSource(private val postStorage: PostStorage) : PositionalDataSourc
         Log.d(
             TAG,
             "loadInitial, requestedStartPosition = ${params.requestedStartPosition}," +
-                    " requestedLoadSize = ${params.requestedLoadSize}"
+                " requestedLoadSize = ${params.requestedLoadSize}"
         )
 
         postStorage.loadInitialPosts(
@@ -24,7 +24,7 @@ class PostDataSource(private val postStorage: PostStorage) : PositionalDataSourc
         Log.d(
             TAG,
             "loadRange, startPosition = ${params.startPosition}," +
-                    " loadSize = ${params.loadSize}"
+                " loadSize = ${params.loadSize}"
         )
         postStorage.loadRangePosts(params.startPosition, params.loadSize, callback)
     }
