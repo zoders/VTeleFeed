@@ -6,7 +6,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.drinkless.td.libcore.telegram.TdApi
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
     private lateinit var post: Post
