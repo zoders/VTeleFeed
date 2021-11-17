@@ -25,7 +25,10 @@ class TelegramAuthorizationFragment : Fragment() {
     private var telegramClient: TelegramClient = TelegramClient.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        telegramClient.createClient(activity?.applicationContext!!)
+        //telegramClient.createClient(activity?.applicationContext!!)
+        if (loginType == null) {
+            showTelegramLogin(TelegramClient.TelegramAuthenticationParameterType.PHONE_NUMBER)
+        }
         telegramAuthorizationRequestHandler = telegramClient.setTelegramAuthorizationRequestHandler(
             object : TelegramClient.TelegramAuthorizationRequestListener {
                 override fun onRequestTelegramAuthenticationParameter(
