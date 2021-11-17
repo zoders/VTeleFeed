@@ -33,6 +33,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 updateVkLoginUI()
             }
             buttonLoginTelegram.setOnClickListener {
+                TelegramClient.instance.setCreatedFalse()
                 val rootFr = activity?.supportFragmentManager?.findFragmentByTag("AuthFragment")
                 val id = rootFr?.id
                 activity?.supportFragmentManager?.beginTransaction()

@@ -15,13 +15,13 @@ class MainActivity : AppCompatActivity() {
         val mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(mainActivityBinding.root)
-
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment == null) {
             val fragment = PostListFragment.newInstance()
             supportFragmentManager.beginTransaction().add(
                 R.id.fragment_container,
-                fragment
+                fragment,
+            "PostListFragment"
             ).commit()
         }
 

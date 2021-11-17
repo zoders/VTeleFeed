@@ -51,6 +51,13 @@ class TelegramClient {
         }
     }
 
+    fun setCreatedFalse() {
+        this.created = false
+        client!!.send(TdApi.Close(), null, null)
+        client!!.close()
+        this.authorizationState = null
+    }
+
     // Сраный Detekt не дает сделать больше 10 методов. Это так критично?
     /*
     fun close() {
