@@ -26,6 +26,6 @@ class PostDataSource(private val postStorage: PostStorage) : PositionalDataSourc
             "loadRange, startPosition = ${params.startPosition}," +
                 " loadSize = ${params.loadSize}"
         )
-        postStorage.loadRangePosts(params.startPosition, params.loadSize, callback)
+        postStorage.loadRangePosts(params.loadSize, callback)
     }
 }
