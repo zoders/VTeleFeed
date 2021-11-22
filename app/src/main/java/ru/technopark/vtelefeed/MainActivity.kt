@@ -23,9 +23,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_container,
                 fragment
             ).commit()
+
+            supportFragmentManager
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, TgAuthFragment())
+                .commit()
         }
-
-
     }
 
     companion object {

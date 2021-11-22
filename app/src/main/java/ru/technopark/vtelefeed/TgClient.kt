@@ -1,6 +1,8 @@
 package ru.technopark.vtelefeed
 
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import org.drinkless.td.libcore.telegram.Client
 import org.drinkless.td.libcore.telegram.TdApi
@@ -9,15 +11,17 @@ object TgClient {
 
     private lateinit var client: Client
 
-    lateinit var tgSource: TelegramDataSource
+    private val _authStateFlow: MutableStateFlow<TdApi.AuthorizationState?> =
+        MutableStateFlow(null)
 
+    lateinit var tgSource: TelegramDataSource
 
     val clientFlow = callbackFlow<TdApi.Object> {
 
         client = Client.create(
             { obj ->
                 trySend(obj)
-                handleUpdate(obj)
+                handleAuthStateUpdate(obj)
             },
             { trySend(TdApi.Error(it.hashCode(), it.message)) },
             { trySend(TdApi.Error(it.hashCode(), it.message)) }
@@ -28,8 +32,24 @@ object TgClient {
         awaitClose { client.close() }
     }
 
-    private fun handleUpdate(obj: TdApi.Object) {
+    val authStateFlow: StateFlow<TdApi.AuthorizationState?> = _authStateFlow
+
+    fun setAuthNumber(number: String) {
+        client.send(
+            TdApi.SetAuthenticationPhoneNumber(number, null),
+            null, null
+        )
+    }
+
+    fun checkAuthCode(code: String) {
+        client.send(
+            TdApi.CheckAuthenticationCode(code), null, null
+        )
+    }
+
+    private fun handleAuthStateUpdate(obj: TdApi.Object) {
         if (obj is TdApi.UpdateAuthorizationState) {
+            _authStateFlow.value = obj.authorizationState
             when (obj.authorizationState) {
                 is TdApi.AuthorizationStateWaitTdlibParameters -> setTdLibParameters()
                 is TdApi.AuthorizationStateWaitEncryptionKey -> checkDbEncryptionKey()
@@ -65,12 +85,5 @@ object TgClient {
 
     private fun checkDbEncryptionKey() {
         client.send(TdApi.CheckDatabaseEncryptionKey(), null, null)
-    }
-
-    private fun setAuthNumber() {
-        client.send(
-            TdApi.SetAuthenticationPhoneNumber("79778483132", null),
-            null, null
-        )
     }
 }
