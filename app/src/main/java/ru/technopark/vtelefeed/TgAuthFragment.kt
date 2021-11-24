@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.databinding.FragmentTgAuthBinding
 import ru.technopark.vtelefeed.utils.viewBinding
@@ -37,18 +38,28 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 val isWaitCode = authState is TdApi.AuthorizationStateWaitCode
                 binding.verificationView.isVisible = isWaitCode
                 binding.verificationIcon.isVisible = isWaitCode
+
+                val isReady = authState is TdApi.AuthorizationStateReady
+                binding.userPhoto.isVisible = isReady
+                if (isReady) {
+                    viewModel.loadUserPhoto()
+                }
             }
+        }
+
+        viewModel.userPhoto.observe(viewLifecycleOwner) { photo ->
+            Glide.with(this)
+                .load(photo.minithumbnail?.data)
+                .into(binding.userPhoto)
         }
 
         binding.doneButton.setOnClickListener {
             viewModel.authState.value?.let {
                 when (it) {
-                    is TdApi.AuthorizationStateWaitPhoneNumber -> {
+                    is TdApi.AuthorizationStateWaitPhoneNumber ->
                         viewModel.setPhoneNumber(binding.phoneNumberEditText.text.toString())
-                    }
-                    is TdApi.AuthorizationStateWaitCode -> {
+                    is TdApi.AuthorizationStateWaitCode ->
                         viewModel.setWaitCode(binding.verificationView.vcText)
-                    }
                 }
             }
         }

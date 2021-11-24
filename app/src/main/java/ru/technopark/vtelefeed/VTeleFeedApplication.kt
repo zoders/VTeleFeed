@@ -7,6 +7,9 @@ import com.vk.api.sdk.VKTokenExpiredHandler
 class VTeleFeedApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        instance = this
+
         VK.addTokenExpiredHandler(tokenTracker)
 //        TelegramClient.instance.createClient(this)
     }
@@ -15,5 +18,9 @@ class VTeleFeedApplication : Application() {
         override fun onTokenExpired() {
             MainActivity.startFrom(this@VTeleFeedApplication)
         }
+    }
+
+    companion object {
+        lateinit var instance: VTeleFeedApplication
     }
 }

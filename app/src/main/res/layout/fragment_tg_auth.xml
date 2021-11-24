@@ -35,7 +35,8 @@
             android:src="@drawable/ic_verification"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
 
     <com.github.gongw.VerifyCodeView
             android:id="@+id/verification_view"
@@ -46,7 +47,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/verification_icon"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            tools:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/done_button"
@@ -58,5 +60,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/user_photo"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearance="@style/ShapeAppearance.VTeleFeed.Circle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
