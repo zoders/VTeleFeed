@@ -1,13 +1,12 @@
 package ru.technopark.vtelefeed
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.PositionalDataSource
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import java.util.concurrent.Executors
@@ -20,13 +19,11 @@ class PostStorage : ViewModel() {
 
     private var offset: Offset = Offset()
 
-    private val _authState = MutableLiveData(false)
-
     val posts = mutableListOf<Post>()
 
     val pagedListLiveData: LiveData<PagedList<Post>>
 
-    val authState: LiveData<Boolean> = _authState
+    val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
 
     init {
         val factory = PostSourceFactory(this)
@@ -34,17 +31,6 @@ class PostStorage : ViewModel() {
             PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(PAGE_SIZE).build()
         pagedListLiveData = LivePagedListBuilder(factory, config)
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
-
-        viewModelScope.launch {
-            TgClient.clientFlow.collect { obj ->
-                if (
-                    obj is TdApi.UpdateAuthorizationState &&
-                    obj.authorizationState is TdApi.AuthorizationStateReady
-                ) {
-                    _authState.value = true
-                }
-            }
-        }
     }
 
     fun loadInitialPosts(
