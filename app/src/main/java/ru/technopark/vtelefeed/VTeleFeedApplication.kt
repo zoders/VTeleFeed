@@ -23,9 +23,7 @@ class VTeleFeedApplication : Application() {
 
         // Triggers client creation
         applicationScope.launch {
-            TgClient.clientFlow.collect {
-                val a = 5
-            }
+            TgClient.clientFlow.collect { }
         }
 
         applicationScope.launch {
