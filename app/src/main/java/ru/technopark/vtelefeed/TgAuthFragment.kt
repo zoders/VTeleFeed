@@ -45,6 +45,10 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 binding.verificationView.isVisible = isWaitCode
                 binding.verificationIcon.isVisible = isWaitCode
 
+                val isWaitPassword = authState is TdApi.AuthorizationStateWaitPassword
+                binding.passwordEditText.isVisible = isWaitPassword
+                binding.passwordIcon.isVisible = isWaitPassword
+
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
                 if (isReady) {
@@ -54,8 +58,17 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
             }
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.snackBars.collect { message ->
+                    snackBar(message)
+                }
+            }
+        }
+
         observePhoneNumber()
         observeAuthCode()
+        observePassword()
 
         viewModel.userPhoto.observe(viewLifecycleOwner) { photo ->
             Glide.with(this)
@@ -70,17 +83,12 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                         viewModel.setPhoneNumber(binding.phoneNumberEditText.text.toString())
                     is TdApi.AuthorizationStateWaitCode ->
                         viewModel.setWaitCode(binding.verificationView.vcText)
+                    is TdApi.AuthorizationStateWaitPassword ->
+                        viewModel.setPassword(binding.passwordEditText.text.toString())
                 }
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.snackBars.collect { message ->
-                    snackBar(message)
-                }
-            }
-        }
     }
 
     private fun showLoading(show: Boolean) {
@@ -89,31 +97,39 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
     }
 
     private fun observePhoneNumber() {
-        viewModel.phoneNumber
-            .observe(viewLifecycleOwner) { obj ->
-                showLoading(obj is Loading)
-                when (obj) {
-                    is TdApi.Ok ->
-                        viewModel.onSnackBar(
-                            requireContext().getString(R.string.code_has_been_sent)
-                        )
-                    is TdApi.Error -> viewModel.onSnackBar(obj.message)
-                }
+        viewModel.phoneNumber.observe(viewLifecycleOwner) { obj ->
+            showLoading(obj is Loading)
+            when (obj) {
+                is TdApi.Ok ->
+                    viewModel.onSnackBar(
+                        requireContext().getString(R.string.code_has_been_sent)
+                    )
+                is TdApi.Error -> viewModel.onSnackBar(obj.message)
             }
+        }
     }
 
     private fun observeAuthCode() {
-        viewModel.authCode
-            .observe(viewLifecycleOwner) { obj ->
-                showLoading(obj is Loading)
-                when (obj) {
-                    is TdApi.Ok -> {
-                        viewModel.onSnackBar(requireContext().getString(R.string.auth_success))
-                        binding.progressBar.isVisible = false
-                        binding.doneButton.isVisible = false
-                    }
-                    is TdApi.Error -> viewModel.onSnackBar(obj.message)
+        viewModel.authCode.observe(viewLifecycleOwner) { obj ->
+            showLoading(obj is Loading)
+            when (obj) {
+                is TdApi.Ok ->
+                    viewModel.onSnackBar(requireContext().getString(R.string.auth_code_success))
+                is TdApi.Error -> viewModel.onSnackBar(obj.message)
+            }
+        }
+    }
+
+    private fun observePassword() {
+        viewModel.password.observe(viewLifecycleOwner) { obj ->
+            showLoading(obj is Loading)
+            when (obj) {
+                is TdApi.Ok ->
+                    viewModel.onSnackBar(requireContext().getString(R.string.password_success))
+                is TdApi.Error -> {
+                    viewModel.onSnackBar(obj.message)
                 }
             }
+        }
     }
 }

@@ -1,7 +1,6 @@
 package ru.technopark.vtelefeed
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,12 +14,14 @@ class TgAuthViewModel : ViewModel() {
     private val _userPhoto = MutableLiveData<TdApi.File>()
     private val _phoneNumber = MutableLiveData<TdApi.Object>()
     private val _authCode = MutableLiveData<TdApi.Object>()
+    private val _password = MutableLiveData<TdApi.Object>()
     private val _snackBars = MutableSharedFlow<String>()
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
     val userPhoto: LiveData<TdApi.File> = _userPhoto
     val phoneNumber: LiveData<TdApi.Object> = _phoneNumber
     val authCode: LiveData<TdApi.Object> = _authCode
+    val password: LiveData<TdApi.Object> = _password
 
     val snackBars: SharedFlow<String> = _snackBars.asSharedFlow()
 
@@ -58,6 +59,13 @@ class TgAuthViewModel : ViewModel() {
         viewModelScope.launch {
             _authCode.value = Loading
             _authCode.value = TgClient.checkAuthCode(code)
+        }
+    }
+
+    fun setPassword(password: String) {
+        viewModelScope.launch {
+            _password.value = Loading
+            _password.value = TgClient.checkPassword(password)
         }
     }
 

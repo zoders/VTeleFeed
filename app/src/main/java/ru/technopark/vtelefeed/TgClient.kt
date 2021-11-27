@@ -68,6 +68,14 @@ object TgClient {
         )
     }
 
+    suspend fun checkPassword(password: String): TdApi.Object = suspendCoroutine { cont ->
+        client.send(
+            TdApi.CheckAuthenticationPassword(password),
+            { obj -> cont.resume(obj) },
+            { e -> cont.resumeWithException(e) }
+        )
+    }
+
     suspend fun initMyUser() {
         _myUserStateFlow.value = getMyUser()
     }
