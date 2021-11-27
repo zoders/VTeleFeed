@@ -48,7 +48,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/verification_icon"
             tools:ignore="SpeakableTextPresentCheck"
-            tools:visibility="gone" />
+            app:vcTextColor="@color/white"
+            app:vcWrapper="underLine"
+            app:vcWrapperColor="@color/white"
+            app:vcWrapperStrokeWidth="6dp"
+            app:vcNextWrapperColor="@color/teal_200"
+            app:vcTextSize="32sp"
+            app:vcDividerWidth="16dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/done_button"
@@ -82,6 +88,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
