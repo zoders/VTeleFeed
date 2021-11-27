@@ -1,6 +1,10 @@
 package ru.technopark.vtelefeed
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -28,9 +32,9 @@ class TgAuthViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             TgClient.clientFlow.collect { obj ->
-                if (obj is TdApi.UpdateFile
-                    && obj.file.id == _userPhoto.value?.id
-                    && obj.file.local.isDownloadingCompleted
+                if (obj is TdApi.UpdateFile &&
+                    obj.file.id == _userPhoto.value?.id &&
+                    obj.file.local.isDownloadingCompleted
                 ) {
                     _userPhoto.value = obj.file
                 }

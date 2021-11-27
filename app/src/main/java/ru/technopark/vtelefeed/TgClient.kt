@@ -1,7 +1,12 @@
 package ru.technopark.vtelefeed
 
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.shareIn
 import org.drinkless.td.libcore.telegram.Client
 import org.drinkless.td.libcore.telegram.TdApi
 import java.io.File
@@ -99,7 +104,6 @@ object TgClient {
         when (state) {
             is TdApi.AuthorizationStateWaitTdlibParameters -> setTdLibParameters()
             is TdApi.AuthorizationStateWaitEncryptionKey -> checkDbEncryptionKey()
-
         }
     }
 

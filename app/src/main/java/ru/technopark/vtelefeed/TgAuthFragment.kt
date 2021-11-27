@@ -88,7 +88,6 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 }
             }
         }
-
     }
 
     private fun showLoading(show: Boolean) {
