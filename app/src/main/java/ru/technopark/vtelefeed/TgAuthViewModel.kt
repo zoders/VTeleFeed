@@ -1,6 +1,7 @@
 package ru.technopark.vtelefeed
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
@@ -9,9 +10,14 @@ import ru.technopark.vtelefeed.utils.Loading
 class TgAuthViewModel : ViewModel() {
 
     private val _userPhoto = MutableLiveData<TdApi.File>()
+    private val _phoneNumber = MutableLiveData<TdApi.Object>()
+    private val _authCode = MutableLiveData<TdApi.Object>()
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
     val userPhoto: LiveData<TdApi.File> = _userPhoto
+    val phoneNumber: LiveData<TdApi.Object> = _phoneNumber
+    val authCode: LiveData<TdApi.Object> = _authCode
+
 
     init {
         viewModelScope.launch {
@@ -36,14 +42,18 @@ class TgAuthViewModel : ViewModel() {
         }
     }
 
-    fun setPhoneNumber(number: String) = liveData<TdApi.Object> {
-        emit(Loading)
-        emit(TgClient.setAuthNumber(number))
+    fun setPhoneNumber(number: String) {
+        viewModelScope.launch {
+            _phoneNumber.value = Loading
+            _phoneNumber.value = TgClient.setAuthNumber(number)
+        }
     }
 
-    fun setWaitCode(code: String) = liveData<TdApi.Object> {
-        emit(Loading)
-        emit(TgClient.checkAuthCode(code))
+    fun setWaitCode(code: String) {
+        viewModelScope.launch {
+            _authCode.value = Loading
+            _authCode.value = TgClient.checkAuthCode(code)
+        }
     }
 
     companion object {

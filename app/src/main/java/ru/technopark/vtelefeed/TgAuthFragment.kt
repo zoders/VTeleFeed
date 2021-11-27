@@ -42,10 +42,11 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
 
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
-                binding.doneButton.isVisible = !isReady
-                binding.progressBar.isVisible = !isReady
             }
         }
+
+        observePhoneNumber()
+        observeAuthCode()
 
         viewModel.userPhoto.observe(viewLifecycleOwner) { photo ->
             Glide.with(this)
@@ -56,8 +57,10 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         binding.doneButton.setOnClickListener {
             viewModel.authState.value?.let {
                 when (it) {
-                    is TdApi.AuthorizationStateWaitPhoneNumber -> setPhoneNumber()
-                    is TdApi.AuthorizationStateWaitCode -> setAuthCode()
+                    is TdApi.AuthorizationStateWaitPhoneNumber ->
+                        viewModel.setPhoneNumber(binding.phoneNumberEditText.text.toString())
+                    is TdApi.AuthorizationStateWaitCode ->
+                        viewModel.setWaitCode(binding.verificationView.vcText)
                 }
             }
         }
@@ -68,8 +71,8 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         binding.progressBar.isVisible = show
     }
 
-    private fun setPhoneNumber() {
-        viewModel.setPhoneNumber(binding.phoneNumberEditText.text.toString())
+    private fun observePhoneNumber() {
+        viewModel.phoneNumber
             .observe(viewLifecycleOwner) { obj ->
                 showLoading(obj is Loading)
                 when (obj) {
@@ -79,8 +82,8 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
             }
     }
 
-    private fun setAuthCode() {
-        viewModel.setWaitCode(binding.verificationView.vcText)
+    private fun observeAuthCode() {
+        viewModel.authCode
             .observe(viewLifecycleOwner) { obj ->
                 showLoading(obj is Loading)
                 when (obj) {
