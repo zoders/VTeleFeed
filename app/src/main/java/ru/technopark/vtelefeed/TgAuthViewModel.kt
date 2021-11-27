@@ -2,6 +2,9 @@ package ru.technopark.vtelefeed
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
@@ -12,12 +15,14 @@ class TgAuthViewModel : ViewModel() {
     private val _userPhoto = MutableLiveData<TdApi.File>()
     private val _phoneNumber = MutableLiveData<TdApi.Object>()
     private val _authCode = MutableLiveData<TdApi.Object>()
+    private val _snackBars = MutableSharedFlow<String>()
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
     val userPhoto: LiveData<TdApi.File> = _userPhoto
     val phoneNumber: LiveData<TdApi.Object> = _phoneNumber
     val authCode: LiveData<TdApi.Object> = _authCode
 
+    val snackBars: SharedFlow<String> = _snackBars.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -53,6 +58,12 @@ class TgAuthViewModel : ViewModel() {
         viewModelScope.launch {
             _authCode.value = Loading
             _authCode.value = TgClient.checkAuthCode(code)
+        }
+    }
+
+    fun onSnackBar(message: String) {
+        viewModelScope.launch {
+            _snackBars.emit(message)
         }
     }
 

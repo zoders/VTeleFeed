@@ -5,7 +5,12 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.databinding.FragmentTgAuthBinding
 import ru.technopark.vtelefeed.utils.Loading
@@ -42,6 +47,10 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
 
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
+                if (isReady) {
+                    binding.doneButton.isVisible = false
+                    binding.progressBar.isVisible = false
+                }
             }
         }
 
@@ -64,6 +73,14 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.snackBars.collect { message ->
+                    snackBar(message)
+                }
+            }
+        }
     }
 
     private fun showLoading(show: Boolean) {
@@ -76,8 +93,11 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
             .observe(viewLifecycleOwner) { obj ->
                 showLoading(obj is Loading)
                 when (obj) {
-                    is TdApi.Ok -> snackBar("Phone number success")
-                    is TdApi.Error -> snackBar(obj.message)
+                    is TdApi.Ok ->
+                        viewModel.onSnackBar(
+                            requireContext().getString(R.string.code_has_been_sent)
+                        )
+                    is TdApi.Error -> viewModel.onSnackBar(obj.message)
                 }
             }
     }
@@ -88,11 +108,11 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 showLoading(obj is Loading)
                 when (obj) {
                     is TdApi.Ok -> {
-                        snackBar("Confirmation code success")
+                        viewModel.onSnackBar(requireContext().getString(R.string.auth_success))
                         binding.progressBar.isVisible = false
                         binding.doneButton.isVisible = false
                     }
-                    is TdApi.Error -> snackBar(obj.message)
+                    is TdApi.Error -> viewModel.onSnackBar(obj.message)
                 }
             }
     }
