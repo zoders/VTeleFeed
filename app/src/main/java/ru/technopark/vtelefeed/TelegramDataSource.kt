@@ -60,10 +60,12 @@ class TelegramDataSource(private val client: Client) {
             channelMessages.addAll(newChannelMessages)
         }
 
-        val lastMessage = allMessages.last()
+        val channelMessagesWithLimit = channelMessages.take(limit)
+
+        val lastMessage = channelMessagesWithLimit.last()
 
         return ChannelsMessages(
-            channelMessages,
+            channelMessagesWithLimit,
             Offset(lastMessage.date, lastMessage.chatId, lastMessage.id)
         )
     }

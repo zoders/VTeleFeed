@@ -9,8 +9,6 @@ import androidx.paging.PositionalDataSource
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
-private const val PEREMENNAYA_S_PONYATNYM_NAZVANIEM_SPECIALNO_DLYA_STATIC_ANALYSIS = 20
-
 class PostStorage : ViewModel() {
 
     private val tgClient = TelegramClient.instance
@@ -49,7 +47,6 @@ class PostStorage : ViewModel() {
     }
 
     fun loadRangePosts(
-        startPosition: Int,
         loadSize: Int,
         callback: PositionalDataSource.LoadRangeCallback<Post>
     ) {
@@ -57,15 +54,10 @@ class PostStorage : ViewModel() {
             val channelsMessages = tgSource.getChannelsMessages(loadSize, offset)
             offset = channelsMessages.offset
             callback.onResult(
-                channelsMessages.messages.takeLast(loadSize).map { Post(it) }
+                channelsMessages.messages.map { Post(it) }
             )
         }
     }
-
-    fun getData(startPosition: Int, loadSize: Int): List<Post> =
-        if (startPosition == PEREMENNAYA_S_PONYATNYM_NAZVANIEM_SPECIALNO_DLYA_STATIC_ANALYSIS)
-            emptyList()
-        else posts.subList(startPosition, startPosition + loadSize)
 
     companion object {
         private const val PAGE_SIZE = 20
