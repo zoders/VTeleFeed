@@ -63,13 +63,6 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putBoolean(DONE_FAB_VISIBILITY, binding.doneButton.isVisible)
-        outState.putBoolean(PROGRESSBAR_VISIBILITY, binding.doneButton.isVisible)
-    }
-
     private fun showLoading(show: Boolean) {
         binding.doneButton.isVisible = !show
         binding.progressBar.isVisible = show
@@ -99,10 +92,5 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                     is TdApi.Error -> snackBar(obj.message)
                 }
             }
-    }
-
-    companion object {
-        private const val DONE_FAB_VISIBILITY = "done fab visibility"
-        private const val PROGRESSBAR_VISIBILITY = "progressbar visibility"
     }
 }
