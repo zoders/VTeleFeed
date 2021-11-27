@@ -11,8 +11,7 @@ data class VKPost(
     val date: Long = 0,
     var groupName: String = "",
     var groupPhoto: String = ""
-)
-{
+) {
     companion object {
         fun parse(json: JSONObject): VKPost {
             try {
