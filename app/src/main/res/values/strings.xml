@@ -14,4 +14,7 @@
     <string name="check_telegram_messenger">Проверьте сообщения в Telegram</string>
     <string name="code_has_been_sent">Вам был отправлен код в приложении Telegram.</string>
     <string name="welcome">Добро пожаловать, NULL!</string>
+    <string name="auth_code_success">Код подтвержден успешно!</string>
+    <string name="password_success">Пароль подтвержден успешно!</string>
+    <string name="enter_password">Введите пароль</string>
 </resources>
