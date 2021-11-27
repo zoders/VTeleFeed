@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.technopark.vtelefeed.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,12 +22,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_container,
                 fragment
             ).commit()
-
-            supportFragmentManager
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.fragment_container, TgAuthFragment())
-                .commit()
         }
     }
 
