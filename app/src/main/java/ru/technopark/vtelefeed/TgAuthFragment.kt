@@ -26,13 +26,9 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        savedInstanceState?.let { restoreViewState(it) }
-
         val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER)
         val watcher = MaskFormatWatcher(mask)
         watcher.installOn(binding.phoneNumberEditText)
-
-        binding.progressBar.isVisible
 
         viewModel.authState.observe(viewLifecycleOwner) {
             it?.let { authState ->
@@ -48,7 +44,6 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 binding.userPhoto.isVisible = isReady
                 binding.doneButton.isVisible = !isReady
                 binding.progressBar.isVisible = !isReady
-                val a = 5
             }
         }
 
@@ -75,13 +70,6 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         outState.putBoolean(PROGRESSBAR_VISIBILITY, binding.doneButton.isVisible)
     }
 
-    private fun restoreViewState(savedInstanceState: Bundle) {
-        binding.doneButton.isVisible =
-            savedInstanceState.getBoolean(DONE_FAB_VISIBILITY, true)
-        binding.progressBar.isVisible =
-            savedInstanceState.getBoolean(PROGRESSBAR_VISIBILITY, false)
-    }
-
     private fun showLoading(show: Boolean) {
         binding.doneButton.isVisible = !show
         binding.progressBar.isVisible = show
@@ -106,8 +94,7 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                     is TdApi.Ok -> {
                         snackBar("Confirmation code success")
                         binding.progressBar.isVisible = false
-                        binding.progressBar.isVisible = false
-                        val a = 5
+                        binding.doneButton.isVisible = false
                     }
                     is TdApi.Error -> snackBar(obj.message)
                 }
