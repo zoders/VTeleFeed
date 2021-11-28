@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 
-class PostAdapter(var posts: List<Post>, diffUtilCallback: DiffUtil.ItemCallback<Post>) :
+class PostAdapter(diffUtilCallback: DiffUtil.ItemCallback<Post>) :
     PagedListAdapter<Post, PostHolder>(diffUtilCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post, parent, false)

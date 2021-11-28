@@ -3,6 +3,8 @@ package ru.technopark.vtelefeed
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,11 +47,16 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val adapter = PostAdapter(postStorage.posts, PostDiffer())
+        val adapter = PostAdapter(PostDiffer())
         binding.recyclerView.adapter = adapter
 
         postStorage.authState.observe(viewLifecycleOwner) { state ->
-            if (state is TdApi.AuthorizationStateReady) {
+            val isReady = state is TdApi.AuthorizationStateReady
+
+            binding.pleaseAuthText.isGone = isReady
+            binding.recyclerView.isVisible = isReady
+
+            if (isReady) {
                 postStorage.pagedListLiveData.observe(
                     viewLifecycleOwner,
                     adapter::submitList

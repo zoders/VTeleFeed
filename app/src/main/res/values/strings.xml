@@ -18,4 +18,5 @@
     <string name="password_success">Пароль подтвержден успешно!</string>
     <string name="enter_password">Введите пароль</string>
     <string name="log_in_account">Войти в аккаунт</string>
+    <string name="please_auth">Пожалуйста авторизуйтесь</string>
 </resources>

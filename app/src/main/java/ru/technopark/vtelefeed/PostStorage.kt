@@ -17,8 +17,6 @@ class PostStorage : ViewModel() {
 
     private var offset: Offset = Offset()
 
-    val posts = mutableListOf<Post>()
-
     val pagedListLiveData: LiveData<PagedList<Post>>
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
