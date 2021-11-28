@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import ru.technopark.vtelefeed.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FragmentInteractor {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,13 +17,21 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(mainActivityBinding.root)
 
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment == null) {
-            val fragment = PostListFragment.newInstance()
-            supportFragmentManager.beginTransaction().add(
-                R.id.fragment_container,
-                fragment
-            ).commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                add(R.id.fragment_container, PostListFragment.newInstance())
+            }
+        }
+    }
+
+    override fun back() {
+        supportFragmentManager.popBackStack()
+    }
+
+    override fun openFragment(fragment: Fragment) {
+        supportFragmentManager.commit {
+            replace(R.id.fragment_container, fragment)
+            addToBackStack(null)
         }
     }
 

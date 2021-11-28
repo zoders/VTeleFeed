@@ -1,5 +1,6 @@
 package ru.technopark.vtelefeed
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -28,12 +29,24 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
 
     private val viewModel: TgAuthViewModel by viewModels()
 
+    private var fragmentInteractor: FragmentInteractor? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        fragmentInteractor = activity as FragmentInteractor
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER)
         val watcher = MaskFormatWatcher(mask)
         watcher.installOn(binding.phoneNumberEditText)
+
+        binding.tgAuthToolbar.setNavigationOnClickListener {
+            fragmentInteractor?.back()
+        }
 
         viewModel.authState.observe(viewLifecycleOwner) {
             it?.let { authState ->
