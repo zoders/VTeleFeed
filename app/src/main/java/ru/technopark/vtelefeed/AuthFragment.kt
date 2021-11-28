@@ -1,5 +1,6 @@
 package ru.technopark.vtelefeed
 
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -18,11 +19,23 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         FragmentAuthBinding.bind(requireView())
     }
 
+    private var fragmentInteractor: FragmentInteractor? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        fragmentInteractor = activity as FragmentInteractor
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
             updateVkLoginUI()
+
+            authToolbar.setNavigationOnClickListener {
+                fragmentInteractor?.back()
+            }
 
             buttonLoginVk.setOnClickListener {
                 VKLoginActivity.startFrom(requireContext())
@@ -33,16 +46,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 updateVkLoginUI()
             }
             buttonLoginTelegram.setOnClickListener {
-                val rootFr = activity?.supportFragmentManager?.findFragmentByTag("AuthFragment")
-                val id = rootFr?.id
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(
-                        id!!,
-                        TelegramAuthorizationFragment(),
-                        "TelegramAuthorizationFragment"
-                    )
-                    ?.addToBackStack(null)
-                    ?.commit()
+                fragmentInteractor?.openFragment(TgAuthFragment())
             }
             if (VK.isLoggedIn()) {
                 requestVKUser()

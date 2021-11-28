@@ -5,11 +5,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+            app:title="@string/app_name"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            android:id="@+id/tg_auth_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     <ImageView
             android:id="@+id/phone_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar"
             android:src="@drawable/ic_phone"
             android:layout_width="192dp"
             android:layout_height="192dp"
@@ -35,7 +43,7 @@
             android:src="@drawable/ic_verification"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar"
             tools:visibility="gone" />
 
     <com.github.gongw.VerifyCodeView
@@ -63,7 +71,7 @@
             android:src="@drawable/ic_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar" />
 
     <EditText
             android:id="@+id/password_edit_text"
@@ -106,7 +114,7 @@
             android:layout_height="192dp"
             android:scaleType="centerCrop"
             app:shapeAppearance="@style/ShapeAppearance.VTeleFeed.Circle"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:srcCompat="@tools:sample/avatars"

@@ -1,5 +1,6 @@
 package ru.technopark.vtelefeed
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -15,10 +16,32 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         FragmentPostListBinding.bind(requireView())
     }
 
+    private var fragmentInteractor: FragmentInteractor? = null
+
     private val postStorage: PostStorage by viewModels()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        fragmentInteractor = activity as FragmentInteractor
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.postListToolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.account_menu_item -> {
+                    fragmentInteractor?.openFragment(AuthFragment())
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.postListToolbar.setNavigationOnClickListener {
+            fragmentInteractor?.back()
+        }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
