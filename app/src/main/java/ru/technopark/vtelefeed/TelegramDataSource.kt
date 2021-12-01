@@ -21,13 +21,11 @@ class TelegramDataSource(private val client: Client) {
     ): ChannelsMessages {
         val query = " "
 
-        var allMessages = listOf<TdApi.Message>()
+        var lastMessage: TdApi.Message? = null
         val channelMessages = mutableListOf<TdApi.Message>()
 
         while (channelMessages.size < limit) {
-            val lastMessage = allMessages.lastOrNull()
-
-            allMessages = searchMessages(
+            val allMessages = searchMessages(
                 query,
                 Offset(
                     lastMessage?.date ?: offset.date,
@@ -41,6 +39,8 @@ class TelegramDataSource(private val client: Client) {
                     maxDate
                 )
             ).messages.toList()
+
+            lastMessage = allMessages.lastOrNull()
 
             val newChannelMessages = allMessages
                 .map { msg ->
@@ -62,11 +62,11 @@ class TelegramDataSource(private val client: Client) {
 
         val channelMessagesWithLimit = channelMessages.take(limit)
 
-        val lastMessage = channelMessagesWithLimit.last()
+        val lastChannelMessage = channelMessagesWithLimit.last()
 
         return ChannelsMessages(
             channelMessagesWithLimit,
-            Offset(lastMessage.date, lastMessage.chatId, lastMessage.id)
+            Offset(lastChannelMessage.date, lastChannelMessage.chatId, lastChannelMessage.id)
         )
     }
 
