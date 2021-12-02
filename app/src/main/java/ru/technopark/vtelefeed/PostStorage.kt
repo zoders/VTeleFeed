@@ -35,12 +35,12 @@ class PostStorage : ViewModel() {
         callback: PositionalDataSource.LoadInitialCallback<Post>
     ) {
         viewModelScope.launch {
-            val firstChannelsMessages = tgSource.getChannelsMessages(requestedLoadSize)
+            val firstChannelsMessages = tgSource.getChannelsPosts(requestedLoadSize)
             offset = firstChannelsMessages.offset
             callback.onResult(
-                firstChannelsMessages.messages.map { Post(it) },
+                firstChannelsMessages.posts.map { Post(it) },
                 requestedStartPosition,
-                firstChannelsMessages.messages.size
+                firstChannelsMessages.posts.size
             )
         }
     }
@@ -50,10 +50,10 @@ class PostStorage : ViewModel() {
         callback: PositionalDataSource.LoadRangeCallback<Post>
     ) {
         viewModelScope.launch {
-            val channelsMessages = tgSource.getChannelsMessages(loadSize, offset)
+            val channelsMessages = tgSource.getChannelsPosts(loadSize, offset)
             offset = channelsMessages.offset
             callback.onResult(
-                channelsMessages.messages.map { Post(it) }
+                channelsMessages.posts.map { Post(it) }
             )
         }
     }

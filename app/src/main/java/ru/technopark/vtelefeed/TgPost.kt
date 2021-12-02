@@ -2,6 +2,7 @@ package ru.technopark.vtelefeed
 
 import org.drinkless.td.libcore.telegram.TdApi
 
-data class Post(
-    val tgPost: TgPost
+class TgPost(
+    val message: TdApi.Message,
+    val chat: TdApi.Chat
 )

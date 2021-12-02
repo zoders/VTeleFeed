@@ -1,30 +1,28 @@
 package ru.technopark.vtelefeed
 
-import android.util.Log
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.coroutineScope
 import org.drinkless.td.libcore.telegram.Client
 import org.drinkless.td.libcore.telegram.TdApi
-import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class TelegramDataSource(private val client: Client) {
 
-    suspend fun getChannelsMessages(
+    suspend fun getChannelsPosts(
         limit: Int,
         offset: Offset = Offset(),
         minDate: Int = 0,
         maxDate: Int = 0
-    ): ChannelsMessages {
+    ): ChannelsTgPosts {
         val query = " "
 
         var lastMessage: TdApi.Message? = null
-        val channelMessages = mutableListOf<TdApi.Message>()
+        val channelPosts = mutableListOf<TgPost>()
 
-        while (channelMessages.size < limit) {
+        while (channelPosts.size < limit) {
             val allMessages = searchMessages(
                 query,
                 Offset(
@@ -44,29 +42,40 @@ class TelegramDataSource(private val client: Client) {
 
             val newChannelMessages = allMessages
                 .map { msg ->
-                    withContext(coroutineContext) {
-                        async { msg to getChat(msg.chatId) }
+                    coroutineScope {
+                        async {
+                            TgPost(msg, getChat(msg.chatId)).apply {
+                                chat.photo?.let { photo ->
+                                    photo.small = loadPhoto(photo.small.id) as? TdApi.File
+                                }
+                                (message.content as? TdApi.MessagePhoto)?.photo?.let { photo ->
+                                    photo.sizes.last().photo =
+                                        loadPhoto(photo.sizes.last().photo.id) as? TdApi.File
+                                }
+                            }
+                        }
                     }
                 }
                 .awaitAll()
-                .filter { pair: Pair<TdApi.Message, TdApi.Chat> ->
-                    val chatType = pair.second.type
+                .filter { post ->
+                    val chatType = post.chat.type
                     chatType is TdApi.ChatTypeSupergroup && chatType.isChannel
                 }
-                .map { it.first }
 
-            Log.i(TAG, newChannelMessages.toString())
-
-            channelMessages.addAll(newChannelMessages)
+            channelPosts.addAll(newChannelMessages)
         }
 
-        val channelMessagesWithLimit = channelMessages.take(limit)
+        val channelMessagesWithLimit = channelPosts.take(limit)
 
         val lastChannelMessage = channelMessagesWithLimit.last()
 
-        return ChannelsMessages(
+        return ChannelsTgPosts(
             channelMessagesWithLimit,
-            Offset(lastChannelMessage.date, lastChannelMessage.chatId, lastChannelMessage.id)
+            Offset(
+                lastChannelMessage.message.date,
+                lastChannelMessage.message.chatId,
+                lastChannelMessage.message.id
+            )
         )
     }
 
@@ -97,6 +106,20 @@ class TelegramDataSource(private val client: Client) {
         client.send(
             TdApi.GetChat(chatId),
             { response -> cont.resume(response as TdApi.Chat) },
+            { e -> cont.resumeWithException(e) }
+        )
+    }
+
+    private suspend fun loadPhoto(fileId: Int): TdApi.Object = suspendCoroutine { cont ->
+        client.send(
+            TdApi.DownloadFile(
+                fileId,
+                TgClient.Priorities.HIGH.toInt(),
+                0,
+                0,
+                true
+            ),
+            { obj -> cont.resume(obj) },
             { e -> cont.resumeWithException(e) }
         )
     }

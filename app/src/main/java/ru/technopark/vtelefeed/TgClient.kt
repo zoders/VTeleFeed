@@ -150,7 +150,7 @@ object TgClient {
         )
     }
 
-    private enum class Priorities {
+    enum class Priorities {
         HIGH, MEDIUM, LOW;
 
         fun toInt() = ordinal + 1
