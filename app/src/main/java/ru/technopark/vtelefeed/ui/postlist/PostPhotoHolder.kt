@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
 class PostPhotoHolder(view: View) : PostHolder(view) {
 
     private val binding = PhotoPostItemBinding.bind(itemView)
