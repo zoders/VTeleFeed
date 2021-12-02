@@ -3,11 +3,12 @@ package ru.technopark.vtelefeed.ui.postlist
 import android.view.View
 import com.bumptech.glide.Glide
 import org.drinkless.td.libcore.telegram.TdApi
-import ru.technopark.vtelefeed.data.Post
 import ru.technopark.vtelefeed.R
+import ru.technopark.vtelefeed.data.Post
 import ru.technopark.vtelefeed.databinding.TextPostItemBinding
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class PostTextHolder(view: View) : PostHolder(view) {
 
@@ -33,5 +34,4 @@ class PostTextHolder(view: View) : PostHolder(view) {
             datePost.text = dateText
         }
     }
-
 }

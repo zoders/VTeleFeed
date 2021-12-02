@@ -8,7 +8,9 @@ import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.data.Post
 import ru.technopark.vtelefeed.databinding.PhotoPostItemBinding
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+
 
 class PostPhotoHolder(view: View) : PostHolder(view) {
 
