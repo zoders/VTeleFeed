@@ -63,6 +63,7 @@ dependencies {
     // KTX
     implementation "androidx.fragment:fragment-ktx:1.3.6"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+    implementation "androidx.room:room-ktx:2.3.0"
 
     //For Telegram Authorization
     implementation 'ru.tinkoff.decoro:decoro:1.1.1'
