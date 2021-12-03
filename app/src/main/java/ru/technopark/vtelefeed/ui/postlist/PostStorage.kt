@@ -41,7 +41,7 @@ class PostStorage : ViewModel(), PostsLoader {
     override fun loadFirstItems() {
         viewModelScope.launch {
             val firstChannelsMessages = tgSource.getChannelsPosts(PAGE_SIZE)
-            postDao.saveAll(firstChannelsMessages.posts.map { Post(it) })
+            postDao.saveAll(firstChannelsMessages.map { Post(it) })
         }
     }
 
@@ -49,7 +49,7 @@ class PostStorage : ViewModel(), PostsLoader {
         viewModelScope.launch {
             val offset = Offset(lastItem.date, lastItem.tgPost.chatId, lastItem.id)
             val channelsMessages = tgSource.getChannelsPosts(PAGE_SIZE, offset)
-            postDao.saveAll(channelsMessages.posts.map { Post(it) })
+            postDao.saveAll(channelsMessages.map { Post(it) })
         }
     }
 

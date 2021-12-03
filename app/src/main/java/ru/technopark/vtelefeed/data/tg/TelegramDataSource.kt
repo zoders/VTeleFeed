@@ -16,7 +16,7 @@ class TelegramDataSource(private val client: Client) {
         offset: Offset = Offset(),
         minDate: Int = 0,
         maxDate: Int = 0
-    ): ChannelsTgPosts {
+    ): List<TgPost> {
         val query = " "
 
         var lastMessage: TdApi.Message? = null
@@ -52,18 +52,7 @@ class TelegramDataSource(private val client: Client) {
             channelPosts.addAll(newChannelMessages)
         }
 
-        val channelMessagesWithLimit = channelPosts.take(limit)
-
-        val lastChannelMessage = channelMessagesWithLimit.last()
-
-        return ChannelsTgPosts(
-            channelMessagesWithLimit,
-            Offset(
-                lastChannelMessage.date,
-                lastChannelMessage.chatId,
-                lastChannelMessage.id
-            )
-        )
+        return channelPosts.take(limit)
     }
 
     private suspend fun searchMessages(

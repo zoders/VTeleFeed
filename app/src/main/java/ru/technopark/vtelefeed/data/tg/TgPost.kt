@@ -8,13 +8,12 @@ data class TgPost(
     val id: Long,
     val text: String,
     val date: Int,
-    val photo: String? = null,
+    var photo: String? = null,
     val chatId: Long,
     val chatTitle: String,
-    val chatPhoto: String? = null,
+    var chatPhoto: String? = null,
     val isChannel: Boolean
 ) {
-
     constructor(message: TdApi.Message, chat: TdApi.Chat) :
             this(
                 message.id,
@@ -32,5 +31,4 @@ data class TgPost(
                 chat.photo?.small?.local?.path?.takeIf { it.isNotEmpty() },
                 chat.type.let { it is TdApi.ChatTypeSupergroup && it.isChannel }
             )
-
 }
