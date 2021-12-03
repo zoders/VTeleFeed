@@ -1,6 +1,7 @@
 package ru.technopark.vtelefeed.ui.postlist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -21,9 +22,13 @@ class PostStorage : ViewModel(), PostsLoader {
     private val tgSource: TelegramDataSource by lazy { TgClient.tgSource }
     private val postDao: PostDao = PostsDatabase.instance.postDao()
 
+    private val _refresh = MutableLiveData(false)
+
     val pagedListLiveData: LiveData<PagedList<Post>>
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
+
+    val refresh: LiveData<Boolean> = _refresh
 
     init {
         val factory = postDao.getSource()
@@ -40,8 +45,10 @@ class PostStorage : ViewModel(), PostsLoader {
 
     override fun loadFirstItems() {
         viewModelScope.launch {
+            _refresh.value = true
             val firstChannelsMessages = tgSource.getChannelsPosts(PAGE_SIZE)
             postDao.saveAll(firstChannelsMessages.map { Post(it) })
+            _refresh.value = false
         }
     }
 
@@ -50,6 +57,13 @@ class PostStorage : ViewModel(), PostsLoader {
             val offset = Offset(lastItem.date, lastItem.tgPost.chatId, lastItem.id)
             val channelsMessages = tgSource.getChannelsPosts(PAGE_SIZE, offset)
             postDao.saveAll(channelsMessages.map { Post(it) })
+        }
+    }
+
+    fun refreshPostsDatabase() {
+        viewModelScope.launch {
+            _refresh.value = true
+            postDao.deleteAll()
         }
     }
 

@@ -66,6 +66,14 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
                 )
             }
         }
+
+        postStorage.refresh.observe(viewLifecycleOwner) { refreshing ->
+            binding.postsRefreshLayout.isRefreshing = refreshing
+        }
+
+        binding.postsRefreshLayout.setOnRefreshListener {
+            postStorage.refreshPostsDatabase()
+        }
     }
 
     companion object {
