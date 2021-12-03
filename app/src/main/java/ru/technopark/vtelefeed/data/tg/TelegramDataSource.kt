@@ -48,11 +48,9 @@ class TelegramDataSource(private val client: Client) {
                             TgPost(msg, chat).apply {
                                 val content = msg.content
                                 if (photo == null && content is TdApi.MessagePhoto) {
-                                    photo = (
-                                        loadPhoto(
-                                            content.photo.sizes.last().photo.id
-                                        ) as? TdApi.File
-                                    )?.local?.path
+                                    photo = loadPhoto(content.photo.sizes.last().photo.id).let {
+                                        (it as? TdApi.File)?.local?.path
+                                    }
                                 }
                                 if (chatPhoto == null) {
                                     chat.photo?.small?.id?.let { chatPhotoId ->
