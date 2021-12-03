@@ -16,7 +16,7 @@ import ru.technopark.vtelefeed.data.tg.TelegramDataSource
 import ru.technopark.vtelefeed.data.tg.TgClient
 import java.util.concurrent.Executors
 
-class PostStorage : ViewModel() {
+class PostStorage : ViewModel(), PostsLoader {
 
     private val tgSource: TelegramDataSource by lazy { TgClient.tgSource }
     private val postDao: PostDao = PostsDatabase.instance.postDao()
@@ -34,25 +34,23 @@ class PostStorage : ViewModel() {
                 .setPageSize(PAGE_SIZE)
                 .build()
         pagedListLiveData = LivePagedListBuilder(factory, config)
-            .setBoundaryCallback(object : PagedList.BoundaryCallback<Post>() {
-                override fun onZeroItemsLoaded() {
-                    viewModelScope.launch {
-                        val firstChannelsMessages = tgSource.getChannelsPosts(PAGE_SIZE)
-                        postDao.saveAll(firstChannelsMessages.posts.map { Post(it) })
-                    }
-                }
-
-                override fun onItemAtEndLoaded(itemAtEnd: Post) {
-                    viewModelScope.launch {
-                        val offset = Offset(itemAtEnd.date, itemAtEnd.tgPost.chatId, itemAtEnd.id)
-                        val channelsMessages = tgSource.getChannelsPosts(PAGE_SIZE, offset)
-                        postDao.saveAll(channelsMessages.posts.map { Post(it) })
-                    }
-                }
-
-
-            })
+            .setBoundaryCallback(PostsBoundaryCallback(this))
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
+    }
+
+    override fun loadFirstItems() {
+        viewModelScope.launch {
+            val firstChannelsMessages = tgSource.getChannelsPosts(PAGE_SIZE)
+            postDao.saveAll(firstChannelsMessages.posts.map { Post(it) })
+        }
+    }
+
+    override fun loadNextItems(lastItem: Post) {
+        viewModelScope.launch {
+            val offset = Offset(lastItem.date, lastItem.tgPost.chatId, lastItem.id)
+            val channelsMessages = tgSource.getChannelsPosts(PAGE_SIZE, offset)
+            postDao.saveAll(channelsMessages.posts.map { Post(it) })
+        }
     }
 
     companion object {
