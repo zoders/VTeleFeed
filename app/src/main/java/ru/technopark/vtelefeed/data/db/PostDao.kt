@@ -9,7 +9,6 @@ import ru.technopark.vtelefeed.data.Post
 
 @Dao
 interface PostDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveAll(posts: List<Post>)
 
@@ -18,5 +17,4 @@ interface PostDao {
 
     @Query("SELECT * FROM posts_table ORDER BY date DESC")
     fun getSource(): DataSource.Factory<Int, Post>
-
 }

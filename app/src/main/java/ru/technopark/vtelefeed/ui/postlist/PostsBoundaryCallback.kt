@@ -12,5 +12,4 @@ class PostsBoundaryCallback(private val loader: PostsLoader) : PagedList.Boundar
     override fun onItemAtEndLoaded(itemAtEnd: Post) {
         loader.loadNextItems(itemAtEnd)
     }
-
 }

@@ -7,7 +7,6 @@ import kotlinx.serialization.json.Json
 import ru.technopark.vtelefeed.data.tg.TgPost
 
 class TgPostTypeConverter {
-
     @TypeConverter
     fun tgPostToString(tgPost: TgPost): String {
         return Json.encodeToString(tgPost)
@@ -17,5 +16,4 @@ class TgPostTypeConverter {
     fun tgPostFromString(tgPostString: String): TgPost {
         return Json.decodeFromString(tgPostString)
     }
-
 }
