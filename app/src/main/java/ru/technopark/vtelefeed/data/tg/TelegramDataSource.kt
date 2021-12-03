@@ -43,7 +43,23 @@ class TelegramDataSource(private val client: Client) {
             val newChannelMessages = allMessages
                 .map { msg ->
                     coroutineScope {
-                        async { TgPost(msg, getChat(msg.chatId)) }
+                        async {
+                            val chat = getChat(msg.chatId)
+                            TgPost(msg, chat).apply {
+                                val content = msg.content
+                                if (photo == null && content is TdApi.MessagePhoto) {
+                                    photo = (loadPhoto(
+                                        content.photo.sizes.last().photo.id
+                                    ) as? TdApi.File)?.local?.path
+                                }
+                                if (chatPhoto == null) {
+                                    chat.photo?.small?.id?.let { chatPhotoId ->
+                                        chatPhoto =
+                                            (loadPhoto(chatPhotoId) as? TdApi.File)?.local?.path
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 .awaitAll()

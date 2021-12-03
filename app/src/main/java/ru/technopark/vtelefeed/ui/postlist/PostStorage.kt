@@ -54,8 +54,8 @@ class PostStorage : ViewModel(), PostsLoader {
     }
 
     companion object {
-        private const val PAGE_SIZE = 20
-        private const val PREFETCH_DISTANCE = 5
+        private const val PAGE_SIZE = 35
+        private const val PREFETCH_DISTANCE = 10
         private const val TAG = "PostStorage"
     }
 }
