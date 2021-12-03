@@ -16,7 +16,7 @@ class TelegramDataSource(private val client: Client) {
         offset: Offset = Offset(),
         minDate: Int = 0,
         maxDate: Int = 0
-    ): ChannelsTgPosts {
+    ): List<TgPost> {
         val query = " "
 
         var lastMessage: TdApi.Message? = null
@@ -44,39 +44,31 @@ class TelegramDataSource(private val client: Client) {
                 .map { msg ->
                     coroutineScope {
                         async {
-                            TgPost(msg, getChat(msg.chatId)).apply {
-                                chat.photo?.let { photo ->
-                                    photo.small = loadPhoto(photo.small.id) as? TdApi.File
+                            val chat = getChat(msg.chatId)
+                            TgPost(msg, chat).apply {
+                                val content = msg.content
+                                if (photo == null && content is TdApi.MessagePhoto) {
+                                    photo = loadPhoto(content.photo.sizes.last().photo.id).let {
+                                        (it as? TdApi.File)?.local?.path
+                                    }
                                 }
-                                (message.content as? TdApi.MessagePhoto)?.photo?.let { photo ->
-                                    photo.sizes.last().photo =
-                                        loadPhoto(photo.sizes.last().photo.id) as? TdApi.File
+                                if (chatPhoto == null) {
+                                    chat.photo?.small?.id?.let { chatPhotoId ->
+                                        chatPhoto =
+                                            (loadPhoto(chatPhotoId) as? TdApi.File)?.local?.path
+                                    }
                                 }
                             }
                         }
                     }
                 }
                 .awaitAll()
-                .filter { post ->
-                    val chatType = post.chat.type
-                    chatType is TdApi.ChatTypeSupergroup && chatType.isChannel
-                }
+                .filter { post -> post.isChannel }
 
             channelPosts.addAll(newChannelMessages)
         }
 
-        val channelMessagesWithLimit = channelPosts.take(limit)
-
-        val lastChannelMessage = channelMessagesWithLimit.last()
-
-        return ChannelsTgPosts(
-            channelMessagesWithLimit,
-            Offset(
-                lastChannelMessage.message.date,
-                lastChannelMessage.message.chatId,
-                lastChannelMessage.message.id
-            )
-        )
+        return channelPosts.take(limit)
     }
 
     private suspend fun searchMessages(

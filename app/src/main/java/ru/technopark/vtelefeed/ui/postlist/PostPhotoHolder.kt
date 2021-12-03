@@ -3,7 +3,6 @@ package ru.technopark.vtelefeed.ui.postlist
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.data.Post
 import ru.technopark.vtelefeed.databinding.PhotoPostItemBinding
@@ -16,24 +15,23 @@ class PostPhotoHolder(view: View) : PostHolder(view) {
     private val binding = PhotoPostItemBinding.bind(itemView)
 
     override fun bind(post: Post) {
-        val content = post.tgPost.message.content as TdApi.MessagePhoto
 
         with(binding) {
-            textPost.text = content.caption.text
+            textPost.text = post.tgPost.text
 
             Glide.with(itemView.context)
-                .load(content.photo.sizes.last().photo.local.path)
+                .load(post.tgPost.photo)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(image)
 
             Glide.with(itemView.context)
-                .load(post.tgPost.chat.photo?.small?.local?.path)
+                .load(post.tgPost.chatPhoto)
                 .into(chatPhoto)
 
-            chatTitle.text = post.tgPost.chat.title
+            chatTitle.text = post.tgPost.chatTitle
 
             vkOrTgImageView.setImageResource(R.drawable.tg)
-            val date = Date(post.tgPost.message.date * MILLIS_IN_SECOND)
+            val date = Date(post.date * MILLIS_IN_SECOND)
             val dateText = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault()).format(date)
             datePost.text = dateText
         }

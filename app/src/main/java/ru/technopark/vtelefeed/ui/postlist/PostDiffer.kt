@@ -6,7 +6,7 @@ import ru.technopark.vtelefeed.data.Post
 class PostDiffer : DiffUtil.ItemCallback<Post>() {
 
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
-        oldItem.tgPost.message.id == newItem.tgPost.message.id
+        oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
 }

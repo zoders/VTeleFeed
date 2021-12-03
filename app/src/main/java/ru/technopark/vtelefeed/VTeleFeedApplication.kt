@@ -10,6 +10,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
+import ru.technopark.vtelefeed.data.db.PostsDatabase
 import ru.technopark.vtelefeed.data.tg.TgClient
 import ru.technopark.vtelefeed.ui.MainActivity
 
@@ -35,6 +36,8 @@ class VTeleFeedApplication : Application() {
                 }
             }
         }
+
+        PostsDatabase.instance
 
         VK.addTokenExpiredHandler(tokenTracker)
 //        TelegramClient.instance.createClient(this)
