@@ -43,24 +43,11 @@ class TelegramDataSource(private val client: Client) {
             val newChannelMessages = allMessages
                 .map { msg ->
                     coroutineScope {
-                        async {
-                            TgPost(msg, getChat(msg.chatId)).apply {
-                                chat.photo?.let { photo ->
-                                    photo.small = loadPhoto(photo.small.id) as? TdApi.File
-                                }
-                                (message.content as? TdApi.MessagePhoto)?.photo?.let { photo ->
-                                    photo.sizes.last().photo =
-                                        loadPhoto(photo.sizes.last().photo.id) as? TdApi.File
-                                }
-                            }
-                        }
+                        async { TgPost(msg, getChat(msg.chatId)) }
                     }
                 }
                 .awaitAll()
-                .filter { post ->
-                    val chatType = post.chat.type
-                    chatType is TdApi.ChatTypeSupergroup && chatType.isChannel
-                }
+                .filter { post -> post.isChannel }
 
             channelPosts.addAll(newChannelMessages)
         }
@@ -72,9 +59,9 @@ class TelegramDataSource(private val client: Client) {
         return ChannelsTgPosts(
             channelMessagesWithLimit,
             Offset(
-                lastChannelMessage.message.date,
-                lastChannelMessage.message.chatId,
-                lastChannelMessage.message.id
+                lastChannelMessage.date,
+                lastChannelMessage.chatId,
+                lastChannelMessage.id
             )
         )
     }

@@ -4,9 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import org.drinkless.td.libcore.telegram.TdApi
-import ru.technopark.vtelefeed.data.Post
 import ru.technopark.vtelefeed.R
+import ru.technopark.vtelefeed.data.Post
 
 class PostAdapter(diffUtilCallback: DiffUtil.ItemCallback<Post>) :
     PagedListAdapter<Post, PostHolder>(diffUtilCallback) {
@@ -31,9 +30,10 @@ class PostAdapter(diffUtilCallback: DiffUtil.ItemCallback<Post>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)!!.tgPost.message.content) {
-            is TdApi.MessagePhoto -> ViewType.PHOTO.ordinal
-            else -> ViewType.TEXT.ordinal
+        return if (getItem(position)!!.tgPost.photo != null) {
+            ViewType.PHOTO.ordinal
+        } else {
+            ViewType.TEXT.ordinal
         }
     }
 

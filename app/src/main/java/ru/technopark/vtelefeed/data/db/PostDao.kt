@@ -13,7 +13,7 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveAll(posts: List<Post>)
 
-    @Query("SELECT * FROM posts_table ORDER BY date")
-    suspend fun getSource(): DataSource.Factory<Int, Post>
+    @Query("SELECT * FROM posts_table ORDER BY date DESC")
+    fun getSource(): DataSource.Factory<Int, Post>
 
 }

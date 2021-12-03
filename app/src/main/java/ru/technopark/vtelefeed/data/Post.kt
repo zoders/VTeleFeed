@@ -11,6 +11,6 @@ data class Post(
     val tgPost: TgPost
 ) {
     @PrimaryKey
-    val id: Long = tgPost.message.id
-    val date: Int = tgPost.message.date
+    var id: Long = tgPost.id
+    var date: Int = tgPost.date
 }
