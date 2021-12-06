@@ -1,19 +1,21 @@
-package ru.technopark.vtelefeed.data.tg
+package ru.technopark.vtelefeed.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.drinkless.td.libcore.telegram.TdApi
 
 @Serializable
+@SerialName("TgPost")
 data class TgPost(
-    val id: Long,
+    override val id: Long,
     val text: String,
-    val date: Int,
+    override val date: Int,
     var photo: String? = null,
     val chatId: Long,
     val chatTitle: String,
     var chatPhoto: String? = null,
     val isChannel: Boolean
-) {
+) : BasePost() {
     constructor(message: TdApi.Message, chat: TdApi.Chat) : this(
         message.id,
         when (val content = message.content) {

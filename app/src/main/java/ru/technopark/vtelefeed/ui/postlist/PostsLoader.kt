@@ -3,6 +3,8 @@ package ru.technopark.vtelefeed.ui.postlist
 import ru.technopark.vtelefeed.data.Post
 
 interface PostsLoader {
-    fun loadFirstItems()
-    fun loadNextItems(lastItem: Post)
+    fun loadTgFirstItems()
+    fun loadTgNextItems(lastItem: Post)
+    fun loadVkFirstItems()
+    fun loadVkNextItems()
 }

@@ -7,6 +7,7 @@ import com.vk.api.sdk.exceptions.VKApiIllegalResponseException
 import com.vk.api.sdk.internal.ApiCommand
 import org.json.JSONException
 import org.json.JSONObject
+import ru.technopark.vtelefeed.data.VKPost
 import java.util.concurrent.ConcurrentHashMap
 
 const val DEFAULT_COUNT = 20
@@ -19,6 +20,7 @@ class VKNewsfeedCommand(
         val call = VKMethodCall.Builder()
             .method("newsfeed.get")
             .args("filters", "post")
+            .args("source_ids", "groups")
             .args("count", count)
             .args("start_from", startFrom)
             .version(manager.config.version)
@@ -48,8 +50,8 @@ class VKNewsfeedCommand(
                     if (group != null) {
                         post.groupName = group.groupName
                         post.groupPhoto = group.groupPhoto
+                        itemsList.add(post)
                     }
-                    itemsList.add(post)
                 }
                 return VKPostResponse(itemsList, nextFrom)
             } catch (ex: JSONException) {

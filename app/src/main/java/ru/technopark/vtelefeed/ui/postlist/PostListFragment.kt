@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.databinding.FragmentPostListBinding
@@ -53,8 +52,8 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         val adapter = PostAdapter(PostDiffer())
         binding.recyclerView.adapter = adapter
 
-        postStorage.authState.observe(viewLifecycleOwner) { state ->
-            val isReady = state is TdApi.AuthorizationStateReady
+        postStorage.vkAuthState.observe(viewLifecycleOwner) { logged ->
+            val isReady = logged == true
 
             binding.pleaseAuthText.isGone = isReady
             binding.recyclerView.isVisible = isReady

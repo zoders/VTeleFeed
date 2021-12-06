@@ -2,11 +2,13 @@
 
 package ru.technopark.vtelefeed.utils
 
+import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import ru.technopark.vtelefeed.databinding.FragmentPostListBinding
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

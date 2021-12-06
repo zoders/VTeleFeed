@@ -2,11 +2,12 @@ package ru.technopark.vtelefeed.ui.postlist
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.technopark.vtelefeed.data.Post
+import ru.technopark.vtelefeed.data.VKPost
 
-class PostDiffer : DiffUtil.ItemCallback<Post>() {
+class PostDiffer : DiffUtil.ItemCallback<VKPost>() {
 
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
-        oldItem.id == newItem.id
+    override fun areItemsTheSame(oldItem: VKPost, newItem: VKPost): Boolean =
+        oldItem.postID == newItem.postID && oldItem.sourceID == newItem.sourceID
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: VKPost, newItem: VKPost): Boolean = oldItem == newItem
 }

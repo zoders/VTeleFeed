@@ -12,17 +12,17 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import com.vk.api.sdk.exceptions.VKAuthException
+import kotlinx.coroutines.MainScope
 import ru.technopark.vtelefeed.R
 
 /**
  * Created by Ilya Deydysh on 09.11.2021.
  */
 class VKLoginActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        VK.login(this@VKLoginActivity, arrayListOf(VKScope.WALL, VKScope.PHOTOS))
+        VK.login(this@VKLoginActivity, arrayListOf(VKScope.WALL, VKScope.PHOTOS, VKScope.FRIENDS))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -54,7 +54,7 @@ class VKLoginActivity : AppCompatActivity() {
                     .setPositiveButton(R.string.vk_retry) { _, _ ->
                         VK.login(
                             this@VKLoginActivity,
-                            arrayListOf(VKScope.WALL, VKScope.PHOTOS)
+                            arrayListOf(VKScope.WALL, VKScope.PHOTOS, VKScope.FRIENDS)
                         )
                     }
                     .setNegativeButton(android.R.string.cancel) { dialog, _ ->
