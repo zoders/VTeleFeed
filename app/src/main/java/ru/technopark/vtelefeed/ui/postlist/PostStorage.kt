@@ -11,7 +11,6 @@ import androidx.paging.PagedList
 import com.vk.api.sdk.VK
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
-import ru.technopark.vtelefeed.data.BasePost
 import ru.technopark.vtelefeed.data.Post
 import ru.technopark.vtelefeed.data.db.PostDao
 import ru.technopark.vtelefeed.data.db.PostsDatabase
@@ -29,7 +28,6 @@ class PostStorage : ViewModel(), PostsLoader {
     private val tgSource: TelegramDataSource by lazy { TgClient.tgSource }
     private val vkSource = VKDataSource()
     private val vkPostDao: VKPostDao = PostsDatabase.instance.vkPostDao()
-    private val posts = mutableListOf<BasePost>()
     private val _refresh = MutableLiveData(false)
     private val isVKLogged = MutableLiveData(VK.isLoggedIn())
     val pagedListLiveData: LiveData<PagedList<VKPost>>
@@ -55,7 +53,6 @@ class PostStorage : ViewModel(), PostsLoader {
         viewModelScope.launch {
             _refresh.value = true
             val firstChannelsMessages = tgSource.getChannelsPosts(PAGE_SIZE)
-            posts.addAll(firstChannelsMessages)
             //postDao.saveAll(firstChannelsMessages.map { Post(innerPost = it) })
             _refresh.value = false
         }
@@ -65,7 +62,6 @@ class PostStorage : ViewModel(), PostsLoader {
         viewModelScope.launch {
             val offset = Offset(lastItem.date, (lastItem.innerPost as TgPost).chatId, lastItem.id)
             val channelsMessages = tgSource.getChannelsPosts(PAGE_SIZE, offset)
-            posts.addAll(channelsMessages)
             //postDao.saveAll(channelsMessages.map { Post(innerPost = it) })
         }
     }
@@ -97,7 +93,6 @@ class PostStorage : ViewModel(), PostsLoader {
         viewModelScope.launch {
             _refresh.value = true
             vkPostDao.deleteAll()
-            posts.clear()
         }
     }
 

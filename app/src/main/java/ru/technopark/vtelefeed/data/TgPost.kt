@@ -7,15 +7,15 @@ import org.drinkless.td.libcore.telegram.TdApi
 @Serializable
 @SerialName("TgPost")
 data class TgPost(
-    override val id: Long,
+    val id: Long,
     val text: String,
-    override val date: Int,
+    val date: Int,
     var photo: String? = null,
     val chatId: Long,
     val chatTitle: String,
     var chatPhoto: String? = null,
     val isChannel: Boolean
-) : BasePost() {
+) {
     constructor(message: TdApi.Message, chat: TdApi.Chat) : this(
         message.id,
         when (val content = message.content) {

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Entity(tableName = "posts_table")
 data class Post(
-    val innerPost: BasePost
+    val innerPost: TgPost
 ) {
     @PrimaryKey
     var id: Long = innerPost.id
