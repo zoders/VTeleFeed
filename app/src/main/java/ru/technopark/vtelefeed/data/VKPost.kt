@@ -18,11 +18,11 @@ import kotlin.collections.ArrayList
 @Entity(tableName = "vk_posts_table")
 data class VKPost(
     @PrimaryKey
-    val id: String = "",
+    override val id: String = "",
     val postID: Int = 0,
     val sourceID: Int = 0,
     val text: String = "",
-    val date: Int = 0,
+    override val date: Int = 0,
     val reposts: Int = 0,
     val likes: Int = 0,
     val views: Int = 0,
@@ -34,7 +34,7 @@ data class VKPost(
     val audios: List<VKAudio>? = null,
     var groupName: String = "",
     var groupPhoto: String = ""
-) {
+) : BasePost() {
     companion object {
         fun parse(json: JSONObject): VKPost {
             try {

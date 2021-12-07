@@ -1,23 +1,21 @@
-package ru.technopark.vtelefeed.ui.postlist
+package ru.technopark.vtelefeed.ui.postlist.vk
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import ru.technopark.vtelefeed.R
-import ru.technopark.vtelefeed.data.Post
-import ru.technopark.vtelefeed.data.TgPost
 import ru.technopark.vtelefeed.data.VKPost
 
-class PostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
-    PagedListAdapter<VKPost, PostHolder>(diffUtilCallback) {
+class VKPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
+    PagedListAdapter<VKPost, VKPostHolder>(diffUtilCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VKPostHolder {
         return when (viewType) {
             ViewType.PHOTO.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.photo_post_item, parent, false)
-                PostPhotoHolder(view)
+                VKPostPhotoHolder(view)
             }
             ViewType.VKPHOTO.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
@@ -27,13 +25,13 @@ class PostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
             else -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.text_post_item, parent, false)
-                PostTextHolder(view)
+                VKPostTextHolder(view)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: PostHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+    override fun onBindViewHolder(holder: VKPostHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it as VKPost) }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -46,7 +44,7 @@ class PostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
         } else{
             ViewType.TEXT.ordinal
         }*/
-        return if (getItem(position)!!.photos!!.isNotEmpty()) {
+        return if ((getItem(position)!! as VKPost).photos!!.isNotEmpty()) {
             ViewType.VKPHOTO.ordinal
         } else {
             ViewType.TEXT.ordinal

@@ -1,11 +1,11 @@
-package ru.technopark.vtelefeed.ui.postlist
+package ru.technopark.vtelefeed.ui.postlist.vk
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.vk.api.sdk.VK
@@ -23,16 +23,13 @@ import ru.technopark.vtelefeed.data.db.VKPostDao
 import ru.technopark.vtelefeed.data.vk.VKDataSource
 import java.util.concurrent.Executors
 
-class PostStorage : ViewModel(), PostsLoader {
+class VKPostStorage : ViewModel(), VKPostsLoader {
 
-    private val tgSource: TelegramDataSource by lazy { TgClient.tgSource }
     private val vkSource = VKDataSource()
     private val vkPostDao: VKPostDao = PostsDatabase.instance.vkPostDao()
     private val _refresh = MutableLiveData(false)
     private val isVKLogged = MutableLiveData(VK.isLoggedIn())
     val pagedListLiveData: LiveData<PagedList<VKPost>>
-
-    val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
     val vkAuthState: LiveData<Boolean> =  isVKLogged
     val refresh: LiveData<Boolean> = _refresh
 
@@ -45,25 +42,9 @@ class PostStorage : ViewModel(), PostsLoader {
                 .setPageSize(PAGE_SIZE)
                 .build()
         pagedListLiveData = LivePagedListBuilder(factory, config)
-            .setBoundaryCallback(PostsBoundaryCallback(this))
+            .setBoundaryCallback(VKPostsBoundaryCallback(this))
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
-    }
 
-    override fun loadTgFirstItems() {
-        viewModelScope.launch {
-            _refresh.value = true
-            val firstChannelsMessages = tgSource.getChannelsPosts(PAGE_SIZE)
-            //postDao.saveAll(firstChannelsMessages.map { Post(innerPost = it) })
-            _refresh.value = false
-        }
-    }
-
-    override fun loadTgNextItems(lastItem: Post) {
-        viewModelScope.launch {
-            val offset = Offset(lastItem.date, (lastItem.innerPost as TgPost).chatId, lastItem.id)
-            val channelsMessages = tgSource.getChannelsPosts(PAGE_SIZE, offset)
-            //postDao.saveAll(channelsMessages.map { Post(innerPost = it) })
-        }
     }
 
     override fun loadVkFirstItems() {
@@ -76,7 +57,6 @@ class PostStorage : ViewModel(), PostsLoader {
             }
         }
     }
-
 
     override fun loadVkNextItems() {
         if (VK.isLoggedIn()) {

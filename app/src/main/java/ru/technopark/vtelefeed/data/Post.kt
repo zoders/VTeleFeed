@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "posts_table")
 data class Post(
     val innerPost: TgPost
-) {
+) : BasePost() {
     @PrimaryKey
-    var id: Long = innerPost.id
-    var date: Int = innerPost.date
+    override var id: String = innerPost.id.toString() + '_'+ innerPost.chatId.toString()
+    override var date: Int = innerPost.date
 }
