@@ -21,6 +21,10 @@ import ru.technopark.vtelefeed.ui.postlist.vk.VKPostAdapter
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostDiffer
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostStorage
 import ru.technopark.vtelefeed.utils.viewBinding
+import android.content.SharedPreferences
+
+
+
 
 class PostListFragment : Fragment(R.layout.fragment_post_list) {
 
@@ -35,7 +39,6 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         fragmentInteractor = activity as FragmentInteractor
     }
 

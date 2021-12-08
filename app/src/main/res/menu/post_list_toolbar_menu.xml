@@ -2,6 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+            android:id="@+id/tg_bar"
+            app:showAsAction="always"
+            app:icon="@drawable/compact_logo_tg"
+            android:title="TG"
+            android:icon="@drawable/compact_logo_tg" />
+    <item
             android:id="@+id/app_bar_switch"
             android:title="Switch"
             app:showAsAction="always"
@@ -9,10 +15,17 @@
             app:actionViewClass="androidx.appcompat.widget.SwitchCompat"
             />
     <item
+            android:id="@+id/vk_bar"
+            app:showAsAction="always"
+            app:icon="@drawable/compact_logo_vk"
+            android:title="VK"
+            android:icon="@drawable/compact_logo_vk" />
+    <item
             android:title="@string/log_in_account"
             android:icon="@drawable/ic_baseline_account_circle_24"
-            app:showAsAction="ifRoom"
+            app:showAsAction="always"
             android:id="@+id/account_menu_item" />
+
 </menu>
 <!--
 
