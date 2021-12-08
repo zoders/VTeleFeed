@@ -47,7 +47,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
             buttonLoginVk.setOnClickListener {
                 VKLoginActivity.startFrom(requireContext())
-                updateVkLoginUI()
             }
 
             imbuttonVkLogout.setOnClickListener {
@@ -58,6 +57,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 fragmentInteractor?.openFragment(TgAuthFragment())
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateVkLoginUI()
     }
 
     private fun updateVkLoginUI() {
