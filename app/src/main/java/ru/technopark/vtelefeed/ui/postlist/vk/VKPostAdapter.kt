@@ -14,17 +14,12 @@ class VKPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
         return when (viewType) {
             ViewType.PHOTO.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.photo_post_item, parent, false)
-                VKPostPhotoHolder(view)
-            }
-            ViewType.VKPHOTO.ordinal -> {
-                val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.vk_photo_post_item, parent, false)
                 VKPostPhotoHolder(view)
             }
             else -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.text_post_item, parent, false)
+                    .inflate(R.layout.vk_text_post_item, parent, false)
                 VKPostTextHolder(view)
             }
         }
@@ -35,23 +30,14 @@ class VKPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        /*return if (getItem(position)!!.innerPost is TgPost) {
-            if ((getItem(position)!!.innerPost as TgPost).photo != null) {
-                ViewType.PHOTO.ordinal
-            } else {
-                ViewType.TEXT.ordinal
-            }
-        } else{
-            ViewType.TEXT.ordinal
-        }*/
-        return if ((getItem(position)!! as VKPost).photos!!.isNotEmpty()) {
-            ViewType.VKPHOTO.ordinal
+        return if (getItem(position)!!.photos!!.isNotEmpty() || getItem(position)!!.videos!!.isNotEmpty()) {
+            ViewType.PHOTO.ordinal
         } else {
             ViewType.TEXT.ordinal
         }
     }
 
     private enum class ViewType {
-        PHOTO, TEXT, VKPHOTO
+        PHOTO, TEXT
     }
 }

@@ -5,4 +5,14 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@android:color/holo_green_light</item>
+        <item name="colorSwitchThumbNormal">@android:color/holo_orange_dark</item>>
+        <item name="android:colorForeground">@android:color/darker_gray</item>
+        <item name="trackTint">#8e8e8e</item>
+    </style>
+    <style name="CustomSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:thumb">@drawable/switch_thumb</item>
+    </style>
+
 </resources>

@@ -6,12 +6,7 @@ import ru.technopark.vtelefeed.data.VKPost
 class VKPostsBoundaryCallback(private val loader: VKPostsLoader) : PagedList.BoundaryCallback<VKPost>() {
 
     override fun onZeroItemsLoaded() {
-        if (false) {
-            loader.loadTgFirstItems()
-        }
-        else {
-            loader.loadVkFirstItems()
-        }
+        loader.loadVkFirstItems()
 
     }
 

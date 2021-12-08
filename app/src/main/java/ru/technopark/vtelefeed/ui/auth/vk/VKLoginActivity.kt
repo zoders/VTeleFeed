@@ -12,6 +12,7 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import com.vk.api.sdk.exceptions.VKAuthException
+import com.vk.api.sdk.utils.VKUtils
 import kotlinx.coroutines.MainScope
 import ru.technopark.vtelefeed.R
 

@@ -2,6 +2,8 @@ package ru.technopark.vtelefeed.ui.postlist
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
@@ -30,15 +32,11 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
 
     private val vkPostStorage: VKPostStorage by viewModels()
     private val tgPostStorage: TgPostStorage by viewModels()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         fragmentInteractor = activity as FragmentInteractor
-    }
-
-
-    fun onCheckedChanged(checked: Boolean) {
-        // implementation
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,27 +52,20 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
             }
         }
 
-        binding.postListToolbar.findViewById<SwitchCompat>(R.id.app_bar_switch).setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                tgPostStorage.refresh
-                Toast.makeText(activity, "))))", Toast.LENGTH_LONG).show()
-            }
-            else {
-                Toast.makeText(activity, "((((", Toast.LENGTH_LONG).show()
-            }
-        }
         binding.postListToolbar.setNavigationOnClickListener {
             fragmentInteractor?.back()
         }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        val checked = binding.postListToolbar.findViewById<SwitchCompat>(R.id.app_bar_switch).isChecked
-        if (checked) {
-            setVkAdapter()
+        val checked = binding
+            .postListToolbar.findViewById<SwitchCompat>(R.id.app_bar_switch).isChecked
+        when (checked) {
+            true -> setVkAdapter()
+            false -> setTgAdapter()
         }
-        else {
-            setTgAdapter()
-        }
-        binding.postListToolbar.findViewById<SwitchCompat>(R.id.app_bar_switch).setOnCheckedChangeListener { _, b ->
+        binding.postListToolbar
+            .findViewById<SwitchCompat>(R.id.app_bar_switch)
+            .setOnCheckedChangeListener { _, b ->
             if (b) {
                 setVkAdapter()
             }
@@ -87,7 +78,6 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
     fun setVkAdapter() {
         val adapter = VKPostAdapter(VKPostDiffer())
         binding.recyclerView.adapter = adapter
-
         vkPostStorage.vkAuthState.observe(viewLifecycleOwner) { logged ->
             val isReady = logged == true
 
@@ -101,11 +91,9 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
                 )
             }
         }
-
         vkPostStorage.refresh.observe(viewLifecycleOwner) { refreshing ->
             binding.postsRefreshLayout.isRefreshing = refreshing
         }
-
         binding.postsRefreshLayout.setOnRefreshListener {
             vkPostStorage.refreshPostsDatabase()
         }
@@ -114,7 +102,6 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
     fun setTgAdapter() {
         val adapter = TgPostAdapter(TgPostDiffer())
         binding.recyclerView.adapter = adapter
-
         tgPostStorage.authState.observe(viewLifecycleOwner) { state ->
             val isReady = state is TdApi.AuthorizationStateReady
 
@@ -128,11 +115,9 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
                 )
             }
         }
-
         tgPostStorage.refresh.observe(viewLifecycleOwner) { refreshing ->
             binding.postsRefreshLayout.isRefreshing = refreshing
         }
-
         binding.postsRefreshLayout.setOnRefreshListener {
             tgPostStorage.refreshPostsDatabase()
         }

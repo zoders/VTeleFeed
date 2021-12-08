@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.vk.api.sdk.utils.VKUtils
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.databinding.ActivityMainBinding
 import ru.technopark.vtelefeed.ui.postlist.PostListFragment
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity(), FragmentInteractor {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val fingerprints = VKUtils.getCertificateFingerprint(this, packageName)
         val mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(mainActivityBinding.root)

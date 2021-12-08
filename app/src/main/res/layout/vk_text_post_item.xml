@@ -48,45 +48,19 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 tools:text="Название канала" />
 
-
-        <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/photos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="stretch"
-                app:alignContent="stretch"
-                app:flexDirection = "row"
+        <TextView
                 app:layout_constraintTop_toBottomOf="@id/chat_photo"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" >
-        </com.google.android.flexbox.FlexboxLayout>
-
-        <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/videos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="stretch"
-                app:alignContent="stretch"
-                app:flexDirection = "row"
-                app:layout_constraintTop_toBottomOf="@id/photos"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" >
-        </com.google.android.flexbox.FlexboxLayout>
-
-        <TextView
-                app:layout_constraintTop_toBottomOf="@id/videos"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textIsSelectable="true"
                 android:layout_margin="8dp"
                 android:id="@+id/text_post"
                 android:layout_width="0dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textIsSelectable="true"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textSize="20sp"
+                android:autoLink="web"
                 tools:text="текст поста" />
 
         <TextView
@@ -165,6 +139,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="end"
                 android:layout_marginBottom="8dp"
+
                 android:scaleType="centerCrop"
                 android:background="@drawable/chat" />
         <TextView
