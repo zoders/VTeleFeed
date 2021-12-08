@@ -18,13 +18,13 @@
 
     <ImageView
             android:id="@+id/mini_img"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@drawable/play"
             android:layout_centerInParent="true"
-            app:tint="#99000000" />
+            app:tint="#AF000000" />
     <TextView
             android:id="@+id/video_title"
             android:textStyle="bold"
