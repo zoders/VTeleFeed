@@ -100,6 +100,14 @@ object TgClient {
         )
     }
 
+    fun logOut() {
+        client.send(
+            TdApi.LogOut(),
+            null,
+            null
+        )
+    }
+
     private fun handleAuthStateUpdate(state: TdApi.AuthorizationState) {
         _authStateFlow.value = state
         when (state) {

@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
-import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.databinding.FragmentTgAuthBinding
+import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.utils.Loading
 import ru.technopark.vtelefeed.utils.snackBar
 import ru.technopark.vtelefeed.utils.viewBinding
@@ -67,9 +67,13 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
                 if (isReady) {
-                    binding.doneButton.isVisible = false
+//                    binding.doneButton.isVisible = false
                     binding.progressBar.isVisible = false
                 }
+                val imgRes =
+                    if (isReady) R.drawable.round_logout_black_36
+                    else android.R.drawable.ic_menu_send
+                binding.doneButton.setImageResource(imgRes)
             }
         }
 
@@ -100,6 +104,7 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                         viewModel.setWaitCode(binding.verificationView.vcText)
                     is TdApi.AuthorizationStateWaitPassword ->
                         viewModel.setPassword(binding.passwordEditText.text.toString())
+                    is TdApi.AuthorizationStateReady -> viewModel.logOut()
                 }
             }
         }

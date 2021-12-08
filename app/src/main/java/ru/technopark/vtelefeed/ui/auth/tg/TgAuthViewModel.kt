@@ -74,6 +74,10 @@ class TgAuthViewModel : ViewModel() {
         }
     }
 
+    fun logOut() {
+        TgClient.logOut()
+    }
+
     fun onSnackBar(message: String) {
         viewModelScope.launch {
             _snackBars.emit(message)
