@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.data.VKPost
+import ru.technopark.vtelefeed.data.vk.VKAudio
+import ru.technopark.vtelefeed.data.vk.VKDoc
 import ru.technopark.vtelefeed.data.vk.VKPhoto
 import ru.technopark.vtelefeed.data.vk.VKVideo
 import ru.technopark.vtelefeed.databinding.VkPhotoPostItemBinding
@@ -31,7 +33,7 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
         with(binding) {
             textPost.text = post.text
             photos.removeAllViews()
-            videos.removeAllViews()
+            attachments.removeAllViews()
 
             Glide.with(itemView.context)
                 .load(post.groupPhoto)
@@ -41,6 +43,7 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
             binding.likes.text = post.likes.toString()
             binding.reposts.text = post.reposts.toString()
             binding.comments.text = post.comments.toString()
+            binding.views.text = post.views.toString()
             vkOrTgImageView.setImageResource(R.drawable.vk)
             vkOrTgImageView.setOnClickListener {
                 val url = "https://vk.com/wall-${post.sourceID}_${post.postID}"
@@ -49,9 +52,58 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
             }
             setPhotos(post.photos, binding)
             setVideos(post.videos, binding)
+            setAudios(post.audios, binding)
+            setDocs(post.docs, binding)
             val date = Date(post.date * MILLIS_IN_SECOND)
             val dateText = SimpleDateFormat("HH:mm dd.MM.yyyy", Locale.getDefault()).format(date)
             datePost.text = dateText
+        }
+    }
+
+    private fun setDocs(vkDocs: List<VKDoc>?, binding: VkPhotoPostItemBinding) {
+        if (vkDocs != null) {
+            with(binding) {
+                vkDocs.forEach {
+                    val view = LayoutInflater.from(itemView.context)
+                        .inflate(R.layout.doc_item, attachments, false)
+                    val fileTitle = view.findViewById<TextView>(R.id.file_title)
+                    var size: Int = it.size
+                    var bytes = "B"
+                    if (size / 1024 > 1) {
+                        bytes = "kB"
+                        size /= 1024
+                    }
+                    if (size / 1024 > 1) {
+                        bytes = "MB"
+                        size /= 1024
+                    }
+                    if (size / 1024 > 1) {
+                        bytes = "GB"
+                        size /= 1024
+                    }
+                    val url = it.url
+                    fileTitle.text = "${it.title}: $size $bytes"
+                    fileTitle.setOnClickListener {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        itemView.context.startActivity(browserIntent)
+                    }
+                    attachments.addView(view)
+                }
+            }
+        }
+    }
+
+    private fun setAudios(vkAudios: List<VKAudio>?, binding: VkPhotoPostItemBinding) {
+        if (vkAudios != null) {
+            with(binding) {
+                vkAudios.forEach {
+                    val view = LayoutInflater.from(itemView.context)
+                        .inflate(R.layout.audio_item, attachments, false)
+                    val audioTitle = view.findViewById<TextView>(R.id.audio_title)
+                    audioTitle.text = "${it.artist} - ${it.title}"
+                    attachments.addView(view)
+                }
+            }
         }
     }
 
@@ -60,7 +112,7 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
             with(binding) {
                 vkVideos.forEach {
                     val view = LayoutInflater.from(itemView.context)
-                        .inflate(R.layout.video_item, videos, false)
+                        .inflate(R.layout.video_item, attachments, false)
                     val preview = view.findViewById<ImageView>(R.id.preview)
                     val videoTitle = view.findViewById<TextView>(R.id.video_title)
                     videoTitle.text = it.title
@@ -74,7 +126,7 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(preview)
 
-                    videos.addView(view)
+                    attachments.addView(view)
                 }
             }
         }

@@ -33,6 +33,7 @@ class VKPostTextHolder(view: View) : VKPostHolder(view) {
             binding.likes.text = post.likes.toString()
             binding.reposts.text = post.reposts.toString()
             binding.comments.text = post.comments.toString()
+            binding.views.text = post.views.toString()
             vkOrTgImageView.setImageResource(R.drawable.vk)
             val date = Date(post.date * TgPostPhotoHolder.MILLIS_IN_SECOND)
             val dateText = SimpleDateFormat("HH:mm dd.MM.yyyy", Locale.getDefault()).format(date)
