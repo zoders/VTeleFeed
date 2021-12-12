@@ -35,7 +35,6 @@ class VKPostStorage : ViewModel(), VKPostsLoader {
         pagedListLiveData = LivePagedListBuilder(factory, config)
             .setBoundaryCallback(VKPostsBoundaryCallback(this))
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
-
     }
 
     override fun loadVkFirstItems() {
@@ -55,7 +54,6 @@ class VKPostStorage : ViewModel(), VKPostsLoader {
                 val nextFrom = vkSource.nextFrom
                 val vkPosts = vkSource.getVKResponse(nextFrom)
                 vkPostDao.saveAll(vkPosts)
-
             }
         }
     }
