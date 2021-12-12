@@ -14,6 +14,8 @@ import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.databinding.FragmentPostListBinding
 import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.ui.auth.AuthFragment
+import ru.technopark.vtelefeed.ui.postlist.tg.TgPostAdapter
+import ru.technopark.vtelefeed.ui.postlist.tg.TgPostDiffer
 import ru.technopark.vtelefeed.ui.postlist.tg.TgPostStorage
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostAdapter
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostDiffer

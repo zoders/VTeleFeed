@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.R
-import ru.technopark.vtelefeed.data.tg.TgClient
 import ru.technopark.vtelefeed.databinding.FragmentTgAuthBinding
 import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.utils.Loading

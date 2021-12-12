@@ -1,4 +1,4 @@
-package ru.technopark.vtelefeed.ui.postlist
+package ru.technopark.vtelefeed.ui.postlist.tg
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.technopark.vtelefeed.data.Post

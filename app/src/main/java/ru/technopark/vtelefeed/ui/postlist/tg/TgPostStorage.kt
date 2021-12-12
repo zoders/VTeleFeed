@@ -15,8 +15,6 @@ import ru.technopark.vtelefeed.data.db.PostsDatabase
 import ru.technopark.vtelefeed.data.tg.Offset
 import ru.technopark.vtelefeed.data.tg.TelegramDataSource
 import ru.technopark.vtelefeed.data.tg.TgClient
-import ru.technopark.vtelefeed.ui.postlist.TgPostsBoundaryCallback
-import ru.technopark.vtelefeed.ui.postlist.TgPostsLoader
 import java.util.concurrent.Executors
 
 class TgPostStorage : ViewModel(), TgPostsLoader {

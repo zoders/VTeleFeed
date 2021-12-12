@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.data.VKPost
 import ru.technopark.vtelefeed.databinding.VkTextPostItemBinding
-import ru.technopark.vtelefeed.ui.postlist.TgPostPhotoHolder
+import ru.technopark.vtelefeed.ui.postlist.tg.TgPostPhotoHolder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

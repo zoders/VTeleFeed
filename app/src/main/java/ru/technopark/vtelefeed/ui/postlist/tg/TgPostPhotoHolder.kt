@@ -1,4 +1,4 @@
-package ru.technopark.vtelefeed.ui.postlist
+package ru.technopark.vtelefeed.ui.postlist.tg
 
 import android.view.View
 import com.bumptech.glide.Glide

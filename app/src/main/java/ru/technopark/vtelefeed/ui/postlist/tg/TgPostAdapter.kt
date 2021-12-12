@@ -1,4 +1,4 @@
-package ru.technopark.vtelefeed.ui.postlist
+package ru.technopark.vtelefeed.ui.postlist.tg
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,6 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.data.Post
-import ru.technopark.vtelefeed.ui.postlist.tg.TgPostTextHolder
 
 class TgPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<Post>) :
     PagedListAdapter<Post, TgPostHolder>(diffUtilCallback) {
