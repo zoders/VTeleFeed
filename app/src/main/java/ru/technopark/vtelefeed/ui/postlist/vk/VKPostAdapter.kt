@@ -30,12 +30,13 @@ class VKPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (
-            getItem(position)!!.photos!!.isNotEmpty() ||
-            getItem(position)!!.videos!!.isNotEmpty() ||
-            getItem(position)!!.audios!!.isNotEmpty() ||
-            getItem(position)!!.docs!!.isNotEmpty()
-        ) {
+
+        val hasAttachments = getItem(position)!!.photos!!.isNotEmpty() ||
+                getItem(position)!!.videos!!.isNotEmpty() ||
+                getItem(position)!!.audios!!.isNotEmpty() ||
+                getItem(position)!!.docs!!.isNotEmpty()
+
+        return if (hasAttachments) {
             ViewType.PHOTO.ordinal
         } else {
             ViewType.TEXT.ordinal

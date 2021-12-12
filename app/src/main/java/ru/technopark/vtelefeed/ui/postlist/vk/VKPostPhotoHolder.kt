@@ -56,35 +56,31 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
     }
 
     private fun setDocs(vkDocs: List<VKDoc>?, binding: VkPhotoPostItemBinding) {
-        if (vkDocs != null) {
-            with(binding) {
-                vkDocs.forEach {
-                    val view = LayoutInflater.from(itemView.context)
-                        .inflate(R.layout.doc_item, attachments, false)
-                    val fileTitle = view.findViewById<TextView>(R.id.file_title)
-                    var size: Int = it.size
-                    var bytes = "B"
-                    if (size / 1024 > 1) {
-                        bytes = "kB"
-                        size /= 1024
-                    }
-                    if (size / 1024 > 1) {
-                        bytes = "MB"
-                        size /= 1024
-                    }
-                    if (size / 1024 > 1) {
-                        bytes = "GB"
-                        size /= 1024
-                    }
-                    val url = it.url
-                    fileTitle.text = "${it.title}: $size $bytes"
-                    fileTitle.setOnClickListener {
-                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        itemView.context.startActivity(browserIntent)
-                    }
-                    attachments.addView(view)
-                }
+        vkDocs?.forEach {
+            val view = LayoutInflater.from(itemView.context)
+                .inflate(R.layout.doc_item, binding.attachments, false)
+            val fileTitle = view.findViewById<TextView>(R.id.file_title)
+            var size: Int = it.size
+            var bytes = "B"
+            if (size / TWO_TENTH_POWER > 1) {
+                bytes = "kB"
+                size /= TWO_TENTH_POWER
             }
+            if (size / TWO_TENTH_POWER > 1) {
+                bytes = "MB"
+                size /= TWO_TENTH_POWER
+            }
+            if (size / TWO_TENTH_POWER > 1) {
+                bytes = "GB"
+                size /= TWO_TENTH_POWER
+            }
+            val url = it.url
+            fileTitle.text = "${it.title}: $size $bytes"
+            fileTitle.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                itemView.context.startActivity(browserIntent)
+            }
+            binding.attachments.addView(view)
         }
     }
 
@@ -147,6 +143,7 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
 
     companion object {
         const val MILLIS_IN_SECOND = 1000L
+        const val TWO_TENTH_POWER = 1024
     }
 }
 

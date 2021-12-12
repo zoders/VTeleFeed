@@ -40,15 +40,10 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER)
-        val watcher = MaskFormatWatcher(mask)
+        val watcher = MaskFormatWatcher(MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER))
         watcher.installOn(binding.phoneNumberEditText)
 
-        binding.tgAuthToolbar.setNavigationOnClickListener {
-            fragmentInteractor?.back()
-        }
+        binding.tgAuthToolbar.setNavigationOnClickListener { fragmentInteractor?.back() }
 
         viewModel.authState.observe(viewLifecycleOwner) {
             it?.let { authState ->

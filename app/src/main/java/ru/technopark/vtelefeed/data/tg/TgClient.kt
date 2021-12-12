@@ -102,7 +102,7 @@ object TgClient {
             is TdApi.AuthorizationStateWaitTdlibParameters -> setTdLibParameters()
             is TdApi.AuthorizationStateWaitEncryptionKey -> checkDbEncryptionKey()
             is TdApi.AuthorizationStateReady -> initMyUser()
-            is TdApi.AuthorizationStateClosed -> newClient()
+            is TdApi.AuthorizationStateClosed -> clientFlows.tryEmit(newClientFlow())
         }
     }
 
@@ -145,10 +145,6 @@ object TgClient {
         client?.send(TdApi.GetMe()) { obj ->
             _myUserStateFlow.value = obj as? TdApi.User
         }
-    }
-
-    private fun newClient() {
-        clientFlows.tryEmit(newClientFlow())
     }
 
     private fun newClientFlow(): Flow<TdApi.Object> = callbackFlow<TdApi.Object> {
