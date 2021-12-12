@@ -6,6 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.json.JSONException
 import org.json.JSONObject
+
 @Serializable
 @SerialName("VKLink")
 data class VKLink(
@@ -21,8 +22,7 @@ data class VKLink(
                 var description = ""
                 try {
                     description = json.getString("description")
-                }
-                catch (e: JSONException) {
+                } catch (e: JSONException) {
                     Log.i("VKLink", "There is no description in link $e")
                 }
 

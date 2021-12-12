@@ -12,7 +12,6 @@ import ru.technopark.vtelefeed.data.vk.VKDoc
 import ru.technopark.vtelefeed.data.vk.VKLink
 import ru.technopark.vtelefeed.data.vk.VKPhoto
 import ru.technopark.vtelefeed.data.vk.VKVideo
-import kotlin.collections.ArrayList
 
 @Serializable
 @Entity(tableName = "vk_posts_table")
@@ -79,8 +78,7 @@ data class VKPost(
                             }
                         }
                     }
-                }
-                catch (e: JSONException) {
+                } catch (e: JSONException) {
                     Log.i("VkPost", "There are no attachments in post $e")
                 }
                 return VKPost(

@@ -30,8 +30,7 @@ data class VKVideo(
                 var description = ""
                 try {
                     description = json.getString("description")
-                }
-                catch (e: JSONException) {
+                } catch (e: JSONException) {
                     Log.i("VKVideo", "There is no description in video $e")
                 }
                 return VKVideo(id, ownerId, date, image, title, description)

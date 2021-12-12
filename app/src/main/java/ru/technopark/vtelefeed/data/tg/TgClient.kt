@@ -50,7 +50,6 @@ object TgClient {
             .flatMapLatest { it }
             .shareIn(VTeleFeedApplication.instance.applicationScope, SharingStarted.Lazily)
 
-
     suspend fun setAuthNumber(number: String): TdApi.Object = suspendCoroutine { cont ->
         client?.send(
             TdApi.SetAuthenticationPhoneNumber(number, null),

@@ -1,15 +1,11 @@
 package ru.technopark.vtelefeed.ui.postlist.vk
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import ru.technopark.vtelefeed.R
@@ -22,7 +18,6 @@ import ru.technopark.vtelefeed.databinding.VkPhotoPostItemBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 
 class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
 
@@ -136,7 +131,7 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
         if (vkPhotos != null) {
             with(binding) {
                 vkPhotos.forEach {
-                    //val imageView = ImageView(itemView.context)
+                    // val imageView = ImageView(itemView.context)
                     val view = LayoutInflater.from(itemView.context)
                         .inflate(R.layout.photo_item, photos, false)
                     val imageView = view.findViewById<ImageView>(R.id.post_photo)

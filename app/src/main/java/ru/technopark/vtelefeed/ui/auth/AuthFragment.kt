@@ -7,16 +7,15 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
-import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.data.vk.VKUser
 import ru.technopark.vtelefeed.data.vk.VKUserCommand
 import ru.technopark.vtelefeed.databinding.FragmentAuthBinding
+import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.ui.auth.tg.TgAuthFragment
 import ru.technopark.vtelefeed.ui.auth.vk.VKLoginActivity
 import ru.technopark.vtelefeed.utils.viewBinding
@@ -73,8 +72,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 imbuttonVkLogout.visibility = VISIBLE
                 buttonNameVk.visibility = VISIBLE
                 buttonLoginVk.visibility = INVISIBLE
-            }
-            else{
+            } else {
                 imageVkProfilePic.visibility = INVISIBLE
                 imbuttonVkLogout.visibility = INVISIBLE
                 buttonNameVk.visibility = INVISIBLE
