@@ -26,15 +26,16 @@ class VKPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
     }
 
     override fun onBindViewHolder(holder: VKPostHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it as VKPost) }
+        getItem(position)?.let { holder.bind(it) }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (
-            getItem(position)!!.photos!!.isNotEmpty()
-            || getItem(position)!!.videos!!.isNotEmpty()
-            || getItem(position)!!.audios!!.isNotEmpty()
-            || getItem(position)!!.docs!!.isNotEmpty()) {
+            getItem(position)!!.photos!!.isNotEmpty() ||
+            getItem(position)!!.videos!!.isNotEmpty() ||
+            getItem(position)!!.audios!!.isNotEmpty() ||
+            getItem(position)!!.docs!!.isNotEmpty()
+        ) {
             ViewType.PHOTO.ordinal
         } else {
             ViewType.TEXT.ordinal

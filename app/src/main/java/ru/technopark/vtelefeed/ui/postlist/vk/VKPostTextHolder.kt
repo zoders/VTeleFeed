@@ -28,7 +28,6 @@ class VKPostTextHolder(view: View) : VKPostHolder(view) {
                 .load(post.groupPhoto)
                 .into(chatPhoto)
 
-
             chatTitle.text = post.groupName
             binding.likes.text = post.likes.toString()
             binding.reposts.text = post.reposts.toString()
