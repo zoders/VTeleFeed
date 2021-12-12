@@ -33,9 +33,9 @@ class VKPostAdapter(diffUtilCallback: DiffUtil.ItemCallback<VKPost>) :
 
         val hasAttachments =
             getItem(position)!!.photos!!.isNotEmpty() ||
-                    getItem(position)!!.videos!!.isNotEmpty() ||
-                    getItem(position)!!.audios!!.isNotEmpty() ||
-                    getItem(position)!!.docs!!.isNotEmpty()
+                getItem(position)!!.videos!!.isNotEmpty() ||
+                getItem(position)!!.audios!!.isNotEmpty() ||
+                getItem(position)!!.docs!!.isNotEmpty()
 
         return if (hasAttachments) {
             ViewType.PHOTO.ordinal
