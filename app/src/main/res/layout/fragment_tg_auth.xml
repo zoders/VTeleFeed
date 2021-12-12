@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -48,20 +49,20 @@
 
     <com.github.gongw.VerifyCodeView
             android:id="@+id/verification_view"
-            android:layout_width="192dp"
-            android:layout_height="92dp"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
             android:layout_margin="16dp"
             app:vcTextCount="5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/verification_icon"
-            app:vcTextColor="@color/white"
+            app:vcTextColor="#0088cc"
+            app:vcTextSize="36sp"
+            app:vcDividerWidth="8dp"
             app:vcWrapper="underLine"
-            app:vcWrapperColor="@color/white"
-            app:vcWrapperStrokeWidth="6dp"
-            app:vcNextWrapperColor="@color/teal_200"
-            app:vcTextSize="32sp"
-            app:vcDividerWidth="16dp"
+            app:vcWrapperColor="#313335"
+            app:vcNextWrapperColor="#0088cc"
+            app:vcWrapperStrokeWidth="2dp"
             tools:visibility="gone" />
 
     <ImageView

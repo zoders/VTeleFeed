@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
-import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.databinding.FragmentTgAuthBinding
+import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.utils.Loading
 import ru.technopark.vtelefeed.utils.snackBar
 import ru.technopark.vtelefeed.utils.viewBinding
@@ -40,15 +40,10 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER)
-        val watcher = MaskFormatWatcher(mask)
+        val watcher = MaskFormatWatcher(MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER))
         watcher.installOn(binding.phoneNumberEditText)
 
-        binding.tgAuthToolbar.setNavigationOnClickListener {
-            fragmentInteractor?.back()
-        }
+        binding.tgAuthToolbar.setNavigationOnClickListener { fragmentInteractor?.back() }
 
         viewModel.authState.observe(viewLifecycleOwner) {
             it?.let { authState ->
@@ -67,9 +62,16 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
                 if (isReady) {
-                    binding.doneButton.isVisible = false
                     binding.progressBar.isVisible = false
                 }
+
+                val isLoggingOut = authState is TdApi.AuthorizationStateLoggingOut
+                showLoading(isLoggingOut)
+
+                val imgRes =
+                    if (isReady) R.drawable.round_logout_black_36
+                    else android.R.drawable.ic_menu_send
+                binding.doneButton.setImageResource(imgRes)
             }
         }
 
@@ -84,6 +86,7 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         observePhoneNumber()
         observeAuthCode()
         observePassword()
+        observeLogOut()
 
         viewModel.userPhoto.observe(viewLifecycleOwner) { photo ->
             Glide.with(this)
@@ -100,6 +103,7 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                         viewModel.setWaitCode(binding.verificationView.vcText)
                     is TdApi.AuthorizationStateWaitPassword ->
                         viewModel.setPassword(binding.passwordEditText.text.toString())
+                    is TdApi.AuthorizationStateReady -> viewModel.logOut()
                 }
             }
         }
@@ -140,6 +144,19 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
             when (obj) {
                 is TdApi.Ok ->
                     viewModel.onSnackBar(requireContext().getString(R.string.password_success))
+                is TdApi.Error -> {
+                    viewModel.onSnackBar(obj.message)
+                }
+            }
+        }
+    }
+
+    private fun observeLogOut() {
+        viewModel.logOut.observe(viewLifecycleOwner) { obj ->
+            showLoading(obj is Loading)
+            when (obj) {
+                is TdApi.Ok ->
+                    viewModel.onSnackBar(requireContext().getString(R.string.logging_out_success))
                 is TdApi.Error -> {
                     viewModel.onSnackBar(obj.message)
                 }

@@ -20,6 +20,7 @@ class TgAuthViewModel : ViewModel() {
     private val _phoneNumber = MutableLiveData<TdApi.Object>()
     private val _authCode = MutableLiveData<TdApi.Object>()
     private val _password = MutableLiveData<TdApi.Object>()
+    private val _logOut = MutableLiveData<TdApi.Object>()
     private val _snackBars = MutableSharedFlow<String>()
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
@@ -27,6 +28,7 @@ class TgAuthViewModel : ViewModel() {
     val phoneNumber: LiveData<TdApi.Object> = _phoneNumber
     val authCode: LiveData<TdApi.Object> = _authCode
     val password: LiveData<TdApi.Object> = _password
+    val logOut: LiveData<TdApi.Object> = _logOut
 
     val snackBars: SharedFlow<String> = _snackBars.asSharedFlow()
 
@@ -47,7 +49,9 @@ class TgAuthViewModel : ViewModel() {
                 user?.profilePhoto?.let { photo ->
                     val localFile = photo.big?.takeIf { it.local.isDownloadingCompleted }
                         ?: TgClient.loadUserPhoto(photo.big.id)
-                    _userPhoto.value = localFile
+                    localFile?.let {
+                        _userPhoto.value = it
+                    }
                 }
             }
         }
@@ -71,6 +75,13 @@ class TgAuthViewModel : ViewModel() {
         viewModelScope.launch {
             _password.value = Loading
             _password.value = TgClient.checkPassword(password)
+        }
+    }
+
+    fun logOut() {
+        viewModelScope.launch {
+            _logOut.value = Loading
+            _logOut.value = TgClient.logOut()
         }
     }
 

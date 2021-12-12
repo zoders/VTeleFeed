@@ -6,10 +6,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.technopark.vtelefeed.VTeleFeedApplication
 import ru.technopark.vtelefeed.data.Post
+import ru.technopark.vtelefeed.data.VKPost
 
-@Database(entities = [Post::class], version = 1, exportSchema = false)
-@TypeConverters(TgPostTypeConverter::class)
+@Database(entities = [VKPost::class, Post::class], version = 1, exportSchema = false)
+@TypeConverters(VKPostTypeConverter::class, TgPostTypeConverter::class)
 abstract class PostsDatabase : RoomDatabase() {
+    abstract fun vkPostDao(): VKPostDao
     abstract fun postDao(): PostDao
 
     companion object {
