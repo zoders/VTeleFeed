@@ -2,10 +2,7 @@ package ru.technopark.vtelefeed.ui.postlist
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -17,6 +14,7 @@ import ru.technopark.vtelefeed.R
 import ru.technopark.vtelefeed.databinding.FragmentPostListBinding
 import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.ui.auth.AuthFragment
+import ru.technopark.vtelefeed.ui.postlist.tg.TgPostStorage
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostAdapter
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostDiffer
 import ru.technopark.vtelefeed.ui.postlist.vk.VKPostStorage
@@ -36,7 +34,7 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        fragmentInteractor = activity as FragmentInteractor
+        fragmentInteractor = activity as? FragmentInteractor
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,16 +64,15 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         binding.postListToolbar
             .findViewById<SwitchCompat>(R.id.app_bar_switch)
             .setOnCheckedChangeListener { _, b ->
-            if (b) {
-                setVkAdapter()
+                if (b) {
+                    setVkAdapter()
+                } else {
+                    setTgAdapter()
+                }
             }
-            else {
-                setTgAdapter()
-            }
-        }
     }
 
-    fun setVkAdapter() {
+    private fun setVkAdapter() {
         val adapter = VKPostAdapter(VKPostDiffer())
         binding.recyclerView.adapter = adapter
         vkPostStorage.vkAuthState.observe(viewLifecycleOwner) { logged ->
@@ -99,7 +96,7 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         }
     }
 
-    fun setTgAdapter() {
+    private fun setTgAdapter() {
         val adapter = TgPostAdapter(TgPostDiffer())
         binding.recyclerView.adapter = adapter
         tgPostStorage.authState.observe(viewLifecycleOwner) { state ->
@@ -127,5 +124,7 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         fun newInstance(): PostListFragment {
             return PostListFragment()
         }
+
+        private const val TAG = "PostListFragment"
     }
 }

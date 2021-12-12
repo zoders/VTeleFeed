@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.R
+import ru.technopark.vtelefeed.data.tg.TgClient
 import ru.technopark.vtelefeed.databinding.FragmentTgAuthBinding
 import ru.technopark.vtelefeed.ui.FragmentInteractor
 import ru.technopark.vtelefeed.utils.Loading
@@ -67,9 +68,12 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
                 if (isReady) {
-//                    binding.doneButton.isVisible = false
                     binding.progressBar.isVisible = false
                 }
+
+                val isLoggingOut = authState is TdApi.AuthorizationStateLoggingOut
+                showLoading(isLoggingOut)
+
                 val imgRes =
                     if (isReady) R.drawable.round_logout_black_36
                     else android.R.drawable.ic_menu_send
@@ -88,6 +92,7 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         observePhoneNumber()
         observeAuthCode()
         observePassword()
+        observeLogOut()
 
         viewModel.userPhoto.observe(viewLifecycleOwner) { photo ->
             Glide.with(this)
@@ -145,6 +150,19 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
             when (obj) {
                 is TdApi.Ok ->
                     viewModel.onSnackBar(requireContext().getString(R.string.password_success))
+                is TdApi.Error -> {
+                    viewModel.onSnackBar(obj.message)
+                }
+            }
+        }
+    }
+
+    private fun observeLogOut() {
+        viewModel.logOut.observe(viewLifecycleOwner) { obj ->
+            showLoading(obj is Loading)
+            when (obj) {
+                is TdApi.Ok ->
+                    viewModel.onSnackBar(requireContext().getString(R.string.logging_out_success))
                 is TdApi.Error -> {
                     viewModel.onSnackBar(obj.message)
                 }

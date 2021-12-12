@@ -1,4 +1,4 @@
-package ru.technopark.vtelefeed.ui.postlist
+package ru.technopark.vtelefeed.ui.postlist.tg
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +15,8 @@ import ru.technopark.vtelefeed.data.db.PostsDatabase
 import ru.technopark.vtelefeed.data.tg.Offset
 import ru.technopark.vtelefeed.data.tg.TelegramDataSource
 import ru.technopark.vtelefeed.data.tg.TgClient
+import ru.technopark.vtelefeed.ui.postlist.TgPostsBoundaryCallback
+import ru.technopark.vtelefeed.ui.postlist.TgPostsLoader
 import java.util.concurrent.Executors
 
 class TgPostStorage : ViewModel(), TgPostsLoader {
@@ -22,7 +24,7 @@ class TgPostStorage : ViewModel(), TgPostsLoader {
     private val tgSource: TelegramDataSource by lazy { TgClient.tgSource }
     private val postDao: PostDao = PostsDatabase.instance.postDao()
 
-    private val _refresh = MutableLiveData(false)
+    private val _refresh = MutableLiveData<Boolean>()
 
     val pagedListLiveData: LiveData<PagedList<Post>>
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -20,6 +21,7 @@ class TgAuthViewModel : ViewModel() {
     private val _phoneNumber = MutableLiveData<TdApi.Object>()
     private val _authCode = MutableLiveData<TdApi.Object>()
     private val _password = MutableLiveData<TdApi.Object>()
+    private val _logOut = MutableLiveData<TdApi.Object>()
     private val _snackBars = MutableSharedFlow<String>()
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
@@ -27,6 +29,7 @@ class TgAuthViewModel : ViewModel() {
     val phoneNumber: LiveData<TdApi.Object> = _phoneNumber
     val authCode: LiveData<TdApi.Object> = _authCode
     val password: LiveData<TdApi.Object> = _password
+    val logOut: LiveData<TdApi.Object> = _logOut
 
     val snackBars: SharedFlow<String> = _snackBars.asSharedFlow()
 
@@ -47,7 +50,9 @@ class TgAuthViewModel : ViewModel() {
                 user?.profilePhoto?.let { photo ->
                     val localFile = photo.big?.takeIf { it.local.isDownloadingCompleted }
                         ?: TgClient.loadUserPhoto(photo.big.id)
-                    _userPhoto.value = localFile
+                    localFile?.let {
+                        _userPhoto.value = it
+                    }
                 }
             }
         }
@@ -75,7 +80,10 @@ class TgAuthViewModel : ViewModel() {
     }
 
     fun logOut() {
-        TgClient.logOut()
+        viewModelScope.launch {
+            _logOut.value = Loading
+            _logOut.value = TgClient.logOut()
+        }
     }
 
     fun onSnackBar(message: String) {
