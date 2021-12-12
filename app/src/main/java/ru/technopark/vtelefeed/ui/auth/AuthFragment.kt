@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -54,18 +56,30 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             buttonLoginTelegram.setOnClickListener {
                 fragmentInteractor?.openFragment(TgAuthFragment())
             }
-            if (VK.isLoggedIn()) {
-                requestVKUser()
-            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateVkLoginUI()
     }
 
     private fun updateVkLoginUI() {
         with(binding) {
             val isVkLogged = VK.isLoggedIn()
-            imbuttonVkLogout.isVisible = isVkLogged
-            buttonNameVk.isVisible = isVkLogged
-            buttonLoginVk.isVisible = !isVkLogged
+            if (isVkLogged) {
+                requestVKUser()
+                imageVkProfilePic.visibility = VISIBLE
+                imbuttonVkLogout.visibility = VISIBLE
+                buttonNameVk.visibility = VISIBLE
+                buttonLoginVk.visibility = INVISIBLE
+            }
+            else{
+                imageVkProfilePic.visibility = INVISIBLE
+                imbuttonVkLogout.visibility = INVISIBLE
+                buttonNameVk.visibility = INVISIBLE
+                buttonLoginVk.visibility = VISIBLE
+            }
         }
     }
 

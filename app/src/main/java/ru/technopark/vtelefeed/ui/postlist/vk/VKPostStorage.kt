@@ -77,6 +77,7 @@ class VKPostStorage : ViewModel(), VKPostsLoader {
     }
 
     companion object {
+        const val APP_PREFERENCES = "next_from"
         private const val PAGE_SIZE = 20
         private const val PREFETCH_DISTANCE = 10
         private const val TAG = "PostStorage"

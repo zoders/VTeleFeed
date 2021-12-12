@@ -52,6 +52,8 @@
                     android:layout_height="50dp"
                     android:scaleType="centerCrop"
                     android:layout_marginEnd="5dp"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
                     tools:background="@color/design_default_color_primary_dark" />
 
             <FrameLayout
@@ -60,14 +62,14 @@
 
                 <Button
                         android:id="@+id/button_login_vk"
-                        android:layout_width="230dp"
+                        android:layout_width="200dp"
                         android:layout_height="50dp"
                         android:text="@string/vk_login"
                         android:visibility="visible" />
 
                 <Button
                         android:id="@+id/button_name_vk"
-                        android:layout_width="230dp"
+                        android:layout_width="200dp"
                         android:layout_height="50dp"
                         tools:text="YOUR NAME"
                         android:visibility="gone"
@@ -83,7 +85,8 @@
                     android:layout_marginStart="5dp"
                     android:background="@color/white"
                     android:src="@drawable/round_logout_24"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    tools:visibility="visible"/>
 
         </LinearLayout>
 
@@ -100,6 +103,8 @@
                     android:layout_height="50dp"
                     android:scaleType="centerCrop"
                     android:layout_marginEnd="5dp"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
                     tools:background="@color/design_default_color_primary_dark" />
 
             <FrameLayout
@@ -108,14 +113,14 @@
 
                 <Button
                         android:id="@+id/button_login_telegram"
-                        android:layout_width="230dp"
+                        android:layout_width="200dp"
                         android:layout_height="50dp"
                         android:text="@string/telegram_login"
                         android:visibility="visible" />
 
                 <Button
                         android:id="@+id/button_name_telegram"
-                        android:layout_width="230dp"
+                        android:layout_width="200dp"
                         android:layout_height="50dp"
                         tools:text="YOUR NAME"
                         android:visibility="gone"
@@ -131,7 +136,8 @@
                     android:layout_marginStart="5dp"
                     android:background="@color/white"
                     android:src="@drawable/round_logout_24"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    tools:visibility="visible"/>
 
         </LinearLayout>
 

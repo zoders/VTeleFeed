@@ -15,6 +15,7 @@ import com.vk.api.sdk.exceptions.VKAuthException
 import com.vk.api.sdk.utils.VKUtils
 import kotlinx.coroutines.MainScope
 import ru.technopark.vtelefeed.R
+import ru.technopark.vtelefeed.ui.MainActivity
 
 /**
  * Created by Ilya Deydysh on 09.11.2021.
@@ -35,16 +36,10 @@ class VKLoginActivity : AppCompatActivity() {
                     "Success!",
                     Toast.LENGTH_LONG
                 ).show()
-//                MainActivity.startFrom(this@VKLoginActivity)
                 finish()
             }
 
             override fun onLoginFailed(authException: VKAuthException) {
-                Toast.makeText(
-                    this@VKLoginActivity,
-                    "Try again :(",
-                    Toast.LENGTH_LONG
-                ).show()
                 val descriptionResource =
                     if (authException.webViewError == WebViewClient.ERROR_HOST_LOOKUP)
                         R.string.message_connection_error
