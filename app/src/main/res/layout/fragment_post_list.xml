@@ -3,11 +3,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.Toolbar
+        android:layout_height="match_parent"
+>
+    <com.google.android.material.appbar.MaterialToolbar
             app:menu="@menu/post_list_toolbar_menu"
             app:title="@string/app_name"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             android:id="@+id/post_list_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,9 +37,18 @@
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
                 android:layout_height="match_parent"
                 android:layout_width="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

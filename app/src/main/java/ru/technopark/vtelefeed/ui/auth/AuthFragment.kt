@@ -9,6 +9,8 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
 import ru.technopark.vtelefeed.R
@@ -92,6 +94,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     if (!TextUtils.isEmpty(result.photo)) {
                         Glide.with(this@AuthFragment)
                             .load(result.photo)
+                            .apply(RequestOptions.bitmapTransform(CircleCrop()))
                             .error(R.drawable.user_placeholder)
                             .into(binding.imageVkProfilePic)
                     } else {

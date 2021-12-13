@@ -25,7 +25,7 @@ class TgPostTextHolder(view: View) : TgPostHolder(view) {
 
             vkOrTgImageView.setImageResource(R.drawable.tg)
             val date = Date(post.date * TgPostPhotoHolder.MILLIS_IN_SECOND)
-            val dateText = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault()).format(date)
+            val dateText = SimpleDateFormat("HH:mm dd.MM.yyyy", Locale.getDefault()).format(date)
             datePost.text = dateText
         }
     }

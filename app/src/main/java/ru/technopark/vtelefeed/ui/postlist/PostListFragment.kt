@@ -3,7 +3,6 @@ package ru.technopark.vtelefeed.ui.postlist
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -57,21 +56,29 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        val checked = binding
-            .postListToolbar.findViewById<SwitchCompat>(R.id.app_bar_switch).isChecked
-        when (checked) {
-            true -> setVkAdapter()
-            false -> setTgAdapter()
-        }
-        binding.postListToolbar
-            .findViewById<SwitchCompat>(R.id.app_bar_switch)
-            .setOnCheckedChangeListener { _, b ->
-                if (b) {
-                    setVkAdapter()
-                } else {
-                    setTgAdapter()
-                }
+        when (pageType) {
+            PageType.TG -> {
+                setTgAdapter()
             }
+            PageType.VK -> {
+                setVkAdapter()
+            }
+        }
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.page_tg -> {
+                    setTgAdapter()
+                    pageType = PageType.TG
+                    true
+                }
+                R.id.page_vk -> {
+                    setVkAdapter()
+                    pageType = PageType.VK
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setVkAdapter() {
@@ -126,7 +133,11 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
         fun newInstance(): PostListFragment {
             return PostListFragment()
         }
+        private var pageType = PageType.VK
 
+        private enum class PageType {
+            VK, TG
+        }
         private const val TAG = "PostListFragment"
     }
 }

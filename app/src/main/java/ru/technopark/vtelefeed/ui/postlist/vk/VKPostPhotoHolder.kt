@@ -146,4 +146,3 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
         const val TWO_TENTH_POWER = 1024
     }
 }
-

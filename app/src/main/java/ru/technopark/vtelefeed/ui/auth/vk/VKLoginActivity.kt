@@ -13,6 +13,7 @@ import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import com.vk.api.sdk.exceptions.VKAuthException
 import ru.technopark.vtelefeed.R
+import ru.technopark.vtelefeed.ui.MainActivity
 
 /**
  * Created by Ilya Deydysh on 09.11.2021.
@@ -34,6 +35,8 @@ class VKLoginActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
                 finish()
+
+                MainActivity.startFrom(this@VKLoginActivity)
             }
 
             override fun onLoginFailed(authException: VKAuthException) {

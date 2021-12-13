@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/page_vk"
+            android:enabled="true"
+            android:icon="@drawable/compact_logo_vk"
+            android:title="ВКонтакте"/>
+    <item
+            android:id="@+id/page_tg"
+            android:enabled="true"
+            android:icon="@drawable/compact_logo_tg"
+            android:title="Telegram"/>
+</menu>
