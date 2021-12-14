@@ -12,6 +12,7 @@
 <img src="/pictures/screen_tg_light.png" width="32%"/>
 </p>
 Приложение в темной теме:
+
 <p align="center">
 <img src="/pictures/screen_vk_dark.png" width="32%"/>
 <img src="/pictures/screen_tg_dark.png" width="32%"/>
