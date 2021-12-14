@@ -50,14 +50,17 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 val isWaitPhoneNumber = authState is TdApi.AuthorizationStateWaitPhoneNumber
                 binding.phoneNumberEditText.isVisible = isWaitPhoneNumber
                 binding.phoneIcon.isVisible = isWaitPhoneNumber
+                if (isWaitPhoneNumber) observePhoneNumber()
 
                 val isWaitCode = authState is TdApi.AuthorizationStateWaitCode
                 binding.verificationView.isVisible = isWaitCode
                 binding.verificationIcon.isVisible = isWaitCode
+                if (isWaitCode) observeAuthCode()
 
                 val isWaitPassword = authState is TdApi.AuthorizationStateWaitPassword
                 binding.passwordEditText.isVisible = isWaitPassword
                 binding.passwordIcon.isVisible = isWaitPassword
+                if (isWaitPassword) observePassword()
 
                 val isReady = authState is TdApi.AuthorizationStateReady
                 binding.userPhoto.isVisible = isReady
@@ -68,12 +71,15 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 val isLoggingOut = authState is TdApi.AuthorizationStateLoggingOut
                 showLoading(isLoggingOut)
 
+                if (isReady || isLoggingOut) observeLogOut()
+
                 val imgRes =
                     if (isReady) R.drawable.round_logout_black_36
                     else android.R.drawable.ic_menu_send
                 binding.doneButton.setImageResource(imgRes)
             }
         }
+        observeMyUser()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -83,11 +89,6 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
             }
         }
 
-        observePhoneNumber()
-        observeAuthCode()
-        observePassword()
-        observeLogOut()
-
         viewModel.userPhoto.observe(viewLifecycleOwner) { photo ->
             Glide.with(this)
                 .load(photo.local.path)
@@ -95,17 +96,19 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
         }
 
         binding.doneButton.setOnClickListener {
-            viewModel.authState.value?.let {
-                when (it) {
-                    is TdApi.AuthorizationStateWaitPhoneNumber ->
-                        viewModel.setPhoneNumber(binding.phoneNumberEditText.text.toString())
-                    is TdApi.AuthorizationStateWaitCode ->
-                        viewModel.setWaitCode(binding.verificationView.vcText)
-                    is TdApi.AuthorizationStateWaitPassword ->
-                        viewModel.setPassword(binding.passwordEditText.text.toString())
-                    is TdApi.AuthorizationStateReady -> viewModel.logOut()
-                }
-            }
+            viewModel.authState.value?.let { handleAuthState(it) }
+        }
+    }
+
+    private fun handleAuthState(authState: TdApi.AuthorizationState) {
+        when (authState) {
+            is TdApi.AuthorizationStateWaitPhoneNumber ->
+                viewModel.setPhoneNumber(binding.phoneNumberEditText.text.toString())
+            is TdApi.AuthorizationStateWaitCode ->
+                viewModel.setWaitCode(binding.verificationView.vcText)
+            is TdApi.AuthorizationStateWaitPassword ->
+                viewModel.setPassword(binding.passwordEditText.text.toString())
+            is TdApi.AuthorizationStateReady -> viewModel.logOut()
         }
     }
 
@@ -160,6 +163,17 @@ class TgAuthFragment : Fragment(R.layout.fragment_tg_auth) {
                 is TdApi.Error -> {
                     viewModel.onSnackBar(obj.message)
                 }
+            }
+        }
+    }
+
+    private fun observeMyUser() {
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            binding.userName.isVisible = user != null
+            if (user == null) {
+                binding.userName.text = ""
+            } else {
+                binding.userName.text = "@${user.username}"
             }
         }
     }
