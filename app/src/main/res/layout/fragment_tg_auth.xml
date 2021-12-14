@@ -113,6 +113,7 @@
             android:id="@+id/user_photo"
             android:layout_width="192dp"
             android:layout_height="192dp"
+            android:layout_margin="50dp"
             android:scaleType="centerCrop"
             app:shapeAppearance="@style/ShapeAppearance.VTeleFeed.Circle"
             app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar"

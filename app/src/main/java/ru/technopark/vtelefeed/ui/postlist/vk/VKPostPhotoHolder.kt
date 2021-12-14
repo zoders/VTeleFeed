@@ -40,10 +40,17 @@ class VKPostPhotoHolder(view: View) : VKPostHolder(view) {
             binding.comments.text = post.comments.toString()
             binding.views.text = post.views.toString()
             vkOrTgImageView.setImageResource(R.drawable.vk)
+            val url = "https://vk.com/wall-${post.sourceID}_${post.postID}"
             vkOrTgImageView.setOnClickListener {
-                val url = "https://vk.com/wall-${post.sourceID}_${post.postID}"
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 itemView.context.startActivity(browserIntent)
+            }
+            icoReposts.setOnClickListener {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, url)
+                sendIntent.type = "text/plain"
+                itemView.context.startActivity(sendIntent)
             }
             setPhotos(post.photos, binding)
             setVideos(post.videos, binding)
