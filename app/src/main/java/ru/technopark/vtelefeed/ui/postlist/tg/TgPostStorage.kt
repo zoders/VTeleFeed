@@ -7,6 +7,9 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import ru.technopark.vtelefeed.data.Post
@@ -41,6 +44,15 @@ class TgPostStorage : ViewModel(), TgPostsLoader {
         pagedListLiveData = LivePagedListBuilder(factory, config)
             .setBoundaryCallback(TgPostsBoundaryCallback(this))
             .setFetchExecutor(Executors.newSingleThreadExecutor()).build()
+    }
+
+    init {
+        TgClient.authStateFlow
+            .filterIsInstance<TdApi.AuthorizationStateClosed>()
+            .onEach {
+                postDao.deleteAll()
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun loadFirstItems() {
