@@ -18,6 +18,8 @@
 <img src="/pictures/screen_tg_dark.png" width="32%"/>
 </p>
 
+<a href="https://drive.google.com/drive/folders/1E7GnDL-v7gAprzN57dITGDUnIH6Gp-G5?usp=sharing">VTeleFeed 1.0 на Google Drive</a>
+
 ## Команда авторов
 
 - [Филипповский Александр](https://github.com/zoders)
