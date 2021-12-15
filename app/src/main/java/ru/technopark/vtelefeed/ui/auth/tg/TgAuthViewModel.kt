@@ -24,6 +24,7 @@ class TgAuthViewModel : ViewModel() {
     private val _snackBars = MutableSharedFlow<String>()
 
     val authState: LiveData<TdApi.AuthorizationState?> = TgClient.authStateFlow.asLiveData()
+    val user: LiveData<TdApi.User?> = TgClient.myUserStateFlow.asLiveData()
     val userPhoto: LiveData<TdApi.File> = _userPhoto
     val phoneNumber: LiveData<TdApi.Object> = _phoneNumber
     val authCode: LiveData<TdApi.Object> = _authCode

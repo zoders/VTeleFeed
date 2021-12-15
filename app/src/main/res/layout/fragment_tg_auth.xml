@@ -72,7 +72,8 @@
             android:src="@drawable/ic_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar"
+            tools:visibility="gone" />
 
     <EditText
             android:id="@+id/password_edit_text"
@@ -84,7 +85,8 @@
             android:layout_height="48dp"
             android:layout_margin="16dp"
             tools:ignore="TextContrastCheck"
-            tools:layout_editor_absoluteX="16dp" />
+            tools:layout_editor_absoluteX="16dp"
+            tools:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/done_button"
@@ -113,12 +115,26 @@
             android:id="@+id/user_photo"
             android:layout_width="192dp"
             android:layout_height="192dp"
+            android:layout_margin="50dp"
             android:scaleType="centerCrop"
             app:shapeAppearance="@style/ShapeAppearance.VTeleFeed.Circle"
             app:layout_constraintTop_toBottomOf="@id/tg_auth_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:srcCompat="@tools:sample/avatars"
-            tools:visibility="gone" />
+            tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+            app:layout_constraintTop_toBottomOf="@id/user_photo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="\@UserName"
+            android:textColor="?android:attr/windowBackground"
+            android:layout_margin="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:id="@+id/user_name"
+            android:background="@drawable/rounded_angles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
